@@ -3,13 +3,15 @@ package com.h12.hqueue.server;
 import com.h12.hqueue.di.DependencyManager;
 
 public class HQ {
-    private final DependencyManager dependencyManager;
+    private final AppContext appContext;
+    private static DependencyManager dependencyManager;
 
     public HQ() {
-        dependencyManager = new DependencyManager();
+        appContext = new AppContext();
+        dependencyManager = new DependencyManager(appContext);
     }
 
     public static void start() {
-
+        dependencyManager.start();
     }
 }

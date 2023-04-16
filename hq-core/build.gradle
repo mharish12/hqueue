@@ -6,6 +6,7 @@ dependencies {
 //    implementation 'org.reflections:reflections:0.10.2'
 //    implementation 'com.googlecode.classgrep:classgrep:1.0'
     api group: 'io.github.classgraph', name: 'classgraph', version: '4.8.157'
-    api group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.1.7'
+    implementation 'io.undertow:undertow-core:2.3.4.Final'
+
 
 }
