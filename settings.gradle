@@ -1,3 +1,4 @@
 rootProject.name = 'hqueue'
 include 'hq-core', 'hq-http'
+include 'hq-examples'
 

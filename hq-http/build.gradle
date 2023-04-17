@@ -2,7 +2,7 @@
 dependencies {
     api project(':hq-core')
     api group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.1.7'
-    api 'io.undertow:undertow-core:2.3.4.Final'
+    api group: 'io.undertow', name:'undertow-core', version: '2.3.4.Final'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
