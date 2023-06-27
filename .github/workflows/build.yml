@@ -14,7 +14,7 @@ env:
 jobs:
   build:
     name: Gradle build
-    runs-on: [self-hosted, kubernetes]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
