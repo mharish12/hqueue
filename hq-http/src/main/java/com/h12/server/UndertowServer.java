@@ -1,4 +1,4 @@
-package com.h12.ecommerce.server;
+package com.h12.server;
 
 import com.h12.hqueue.server.http.AbstractIServer;
 import io.undertow.Undertow;

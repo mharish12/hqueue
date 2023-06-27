@@ -6,7 +6,8 @@ dependencies {
 //    implementation 'org.reflections:reflections:0.10.2'
 //    implementation 'com.googlecode.classgrep:classgrep:1.0'
     api group: 'io.github.classgraph', name: 'classgraph', version: '4.8.157'
-    implementation 'io.undertow:undertow-core:2.3.4.Final'
+
+    api group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
 
 
 }

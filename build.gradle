@@ -11,6 +11,7 @@ plugins {
     id 'maven-publish'
     id 'java'
     id 'idea'
+    id 'java-library'
 }
 
 archivesBaseName = 'hqueue'
@@ -22,6 +23,11 @@ allprojects {
     apply plugin: 'java-library'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
     publishing {
         publications {

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class DependencyManager {
 
-    private AppContext appContext;
+    private final AppContext appContext;
 
     public DependencyManager() throws IOException {
         this(new AppContext());
