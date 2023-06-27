@@ -7,18 +7,30 @@ on:
   pull_request:
     branches:
       - main
+env:
+  GIT_TRACE: 1
+  GIT_CURL_VERBOSE: 1
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Gradle build
+    runs-on: [self-hosted, kubernetes]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        server-username: ${{ secrets.USERNAME_GITHUB || github.token }}
+        server-password: ${{ secrets.TOKEN_GITHUB || github.token }}
+        uses: actions/setup-java@v1
         with:
-          java-version: '17'
+          java-version: 17
+
+      - name: Present Working directory
+        run: ls -la
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build
