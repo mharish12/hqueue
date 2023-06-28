@@ -22,7 +22,7 @@ jobs:
             echo "Secret Name: $secret"
             echo "Secret Value: ${!secret}"
           done
-    retention-days: 1
+        retention-days: 1
 
   install-gradle:
     name: Install gradle
