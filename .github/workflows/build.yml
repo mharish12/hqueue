@@ -24,22 +24,22 @@ jobs:
           done
 #        retention-days: 1
 
-  install-gradle:
-    name: Install gradle
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update the package index
-        run: sudo apt update
-
-      - name: Install gradle
-        run: sudo apt install -y gradle
-
-      - name: Verify the installation by checking the Gradle version
-        run: gradle --version
+#  install-gradle:
+#    name: Install gradle
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Update the package index
+#        run: sudo apt update
+#
+#      - name: Install gradle
+#        run: sudo apt install -y gradle
+#
+#      - name: Verify the installation by checking the Gradle version
+#        run: gradle --version
 
   build:
     name: Gradle build
-    needs: install-gradle
+#    needs: install-gradle
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
