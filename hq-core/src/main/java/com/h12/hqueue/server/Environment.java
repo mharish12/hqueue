@@ -23,11 +23,11 @@ public class Environment extends Properties {
 
             InputStream defaultPropertyFile = classLoader.getResourceAsStream(Constants.DEFAULT_PROPERTY_FILE_NAME);
             this.load(defaultPropertyFile);
-            String ENV_NAME = System.getenv(Constants.ENV_NAME);
+            this.putAll(System.getenv());
+            String ENV_NAME = this.getProperty(Constants.ENV_NAME);
             if(ENV_NAME != null) {
                 this.load(classLoader.getResourceAsStream(FILE_NAME + HYPHEN + ENV_NAME + EXTENSION));
             }
-            this.putAll(System.getenv());
         } catch (IOException exception) {
             LOGGER.info("Unable to load properties.", exception);
             throw exception;

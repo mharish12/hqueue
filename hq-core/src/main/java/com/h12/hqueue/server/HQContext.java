@@ -19,14 +19,15 @@ public class HQContext implements IContext {
 
     @Override
     public void start() {
+        appContext.start();
         dependencyManager.start();
     }
 
-    public static AppContext getAppContext() {
+    protected AppContext getAppContext() {
         return appContext;
     }
 
-    public static DependencyManager getDependencyManager() {
+    protected DependencyManager getDependencyManager() {
         return dependencyManager;
     }
 }
