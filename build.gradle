@@ -12,17 +12,57 @@ plugins {
     id 'java'
     id 'idea'
     id 'java-library'
+//    id 'groovy'
 }
 
 archivesBaseName = 'hqueue'
 
+class VersionPlugin implements Plugin<Project> {
+    private static projectVersion = null;
+
+    @Override
+    void apply(Project updatableProject) {
+        if (projectVersion == null && updatableProject.name.equals("hqueue")) {
+            def properties = new Properties();
+            File propertiesFile = updatableProject.file("src/main/resources/project.properties");
+            propertiesFile.withInputStream {
+                properties.load(it);
+            }
+            projectVersion = properties.getProperty("application.version")
+        }
+        if (!updatableProject.name.equals("hqueue")) {
+            updatableProject.version = projectVersion
+        }
+    }
+}
+
+class AnnotationProcessorPlugin implements Plugin<Project> {
+    @Override
+    void apply(Project updatableProject) {
+        updatableProject.plugins.withType(JavaPlugin) {
+            // Add all your annotation processors here
+
+            // Add more annotation processors as needed
+        }
+    }
+
+    private void applyProcessor(Project project, String processorClassName) {
+        project.dependencies {
+            annotationProcessor processorClassName
+        }
+    }
+}
+
 allprojects {
-    group = 'com.h12.hqueue'
-    version = '0.0.1-SNAPSHOT'
+    group = 'com.h12.hq'
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
+    apply plugin: VersionPlugin
+//    apply plugin: 'groovy'
+//    apply plugin: AnnotationProcessorPlugin
+//    apply plugin: AnnotationProcessorPlugin
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -32,7 +72,7 @@ allprojects {
     publishing {
         publications {
             pluginJar(MavenPublication) {
-                groupId "com.h12.hqueue"
+                groupId "com.h12.hq"
                 version this.version
             }
         }

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.h12.ecommerce'
-version = '0.0.1-SNAPSHOT'
+version = this.version
 
 repositories {
     mavenCentral()
@@ -11,9 +11,30 @@ repositories {
 
 dependencies {
     implementation project(":hq-http")
+//    implementation project(":hq-core")
+    annotationProcessor project(":hq-core")
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
+
+compileJava {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+configurations {
+    annotationProcessor
+}
+
+//java {
+//    sourceSets {
+//        main {
+//            annotationProcessor {
+//                // Specify the path to your annotation processor class
+//                className 'com.h12.hq.di.annotation.processor.AutoWireProcessor'
+//            }
+//        }
+//    }
+//}
 
 test {
     useJUnitPlatform()

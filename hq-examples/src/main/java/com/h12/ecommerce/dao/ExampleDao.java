@@ -1,6 +1,6 @@
 package com.h12.ecommerce.dao;
 
-import com.h12.hqueue.di.annotation.Component;
+import com.h12.hq.di.annotation.Component;
 
 import java.util.HashMap;
 import java.util.Map;
