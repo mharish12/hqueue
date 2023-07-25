@@ -1,6 +1,7 @@
-package com.h12.hq.server;
+package com.h12.hq;
 
 import com.h12.hq.di.BeanFactory;
+import com.h12.hq.di.DependencyManager;
 
 import java.io.IOException;
 
@@ -23,6 +24,11 @@ public class AppContext implements IContext {
 
     public BeanFactory getBeanFactory() {
         return beanFactory;
+    }
+
+    @Override
+    public void prepare(DependencyManager dependencyManager) {
+
     }
 
     @Override

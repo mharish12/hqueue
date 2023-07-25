@@ -6,6 +6,13 @@ dependencies {
 //    implementation 'org.reflections:reflections:0.10.2'
 //    implementation 'com.googlecode.classgrep:classgrep:1.0'
     api group: 'io.github.classgraph', name: 'classgraph', version: '4.8.157'
+    api 'org.hibernate:hibernate-validator:8.0.1.Final'
+    api group: 'org.glassfish', name: 'jakarta.el', version: '5.0.0-M1'
+//    api group: 'jakarta.el', name: 'jakarta.el-api', version: '5.0.1'
+//    api group: 'org.eclipse.jetty.orbit', name: 'com.sun.el', version: '2.2.0.v201303151357'
+//    api group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.2'
+
+    api 'org.hibernate:hibernate-validator-annotation-processor:8.0.1.Final'
 
     api group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
 

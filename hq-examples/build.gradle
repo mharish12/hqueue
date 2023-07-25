@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'java-library'
 }
 
 group = 'com.h12.ecommerce'
@@ -10,9 +11,16 @@ repositories {
 }
 
 dependencies {
-    implementation project(":hq-http")
+    api project(":hq-http")
 //    implementation project(":hq-core")
-    annotationProcessor project(":hq-core")
+//    api project(":hq-core")
+    api 'org.hibernate:hibernate-validator:8.0.1.Final'
+    api group: 'jakarta.el', name: 'jakarta.el-api', version: '5.0.1'
+    api group: 'org.eclipse.jetty.orbit', name: 'com.sun.el', version: '2.2.0.v201303151357'
+
+    api 'org.hibernate:hibernate-validator-annotation-processor:8.0.1.Final'
+
+
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

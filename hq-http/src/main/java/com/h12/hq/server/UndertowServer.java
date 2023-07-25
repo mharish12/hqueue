@@ -1,6 +1,6 @@
 package com.h12.hq.server;
 
-import com.h12.hq.server.AppContext;
+import com.h12.hq.AppContext;
 import com.h12.hq.server.http.AbstractIServer;
 import io.undertow.Undertow;
 
@@ -18,7 +18,7 @@ public class UndertowServer extends AbstractIServer {
     @Override
     public void start() {
         undertowServer = builder.build();
-        undertowServer.stop();
+        undertowServer.start();
     }
 
     @Override

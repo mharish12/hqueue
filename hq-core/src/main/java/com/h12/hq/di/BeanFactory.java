@@ -23,6 +23,6 @@ public class BeanFactory {
     }
 
     public Object put(String name, Object object) {
-        return beans.put(object.getClass().getName(), object)
+        return beans.put(name, object);
     }
 }

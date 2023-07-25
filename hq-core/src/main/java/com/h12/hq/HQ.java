@@ -1,9 +1,9 @@
-package com.h12.hq.server;
+package com.h12.hq;
 
 import java.io.IOException;
 
 public class HQ {
-    private static IContext hqContext;
+    private static HQContext hqContext;
 
     private static void init() {
         try {

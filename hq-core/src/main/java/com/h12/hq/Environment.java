@@ -1,4 +1,4 @@
-package com.h12.hq.server;
+package com.h12.hq;
 
 import com.h12.hq.util.Constants;
 import org.slf4j.Logger;

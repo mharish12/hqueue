@@ -3,7 +3,7 @@ package com.h12.hq.di;
 import com.h12.hq.IManager;
 import com.h12.hq.di.impl.DIManagerImpl;
 import com.h12.hq.hooks.ShutDownHookManager;
-import com.h12.hq.server.AppContext;
+import com.h12.hq.AppContext;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -34,5 +34,9 @@ public class DependencyManager implements Serializable {
     public void stop() {
         this.diManager.stop();
         this.shutDownHookManager.stop();
+    }
+
+    public AppContext getAppContext() {
+        return appContext;
     }
 }

@@ -1,7 +1,7 @@
 package com.h12.hq.hooks;
 
 import com.h12.hq.IManager;
-import com.h12.hq.server.AppContext;
+import com.h12.hq.AppContext;
 
 public class ShutDownHookManager implements IManager {
     @Override

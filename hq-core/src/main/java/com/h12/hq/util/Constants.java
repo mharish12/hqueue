@@ -8,6 +8,8 @@ public class Constants {
     public static final String DEFAULT_BEAN_NAME = StringConstants.EMPTY_STRING;
     public static final String SERVER_HOST = "hq.server.host";
     public static final String DEFAULT_SERVER_HOST = "localhost";
+    public static final String SERVER_CLASS = "hq.server.class";
+    public static final String DEFAULT_SERVER_CLASS = "";
     public static final String PACKAGE_TO_SCAN = "hq.package.to.scan";
 
 }

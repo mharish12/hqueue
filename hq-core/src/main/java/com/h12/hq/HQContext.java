@@ -1,10 +1,10 @@
-package com.h12.hq.server;
+package com.h12.hq;
 
 import com.h12.hq.di.DependencyManager;
 
 import java.io.IOException;
 
-public class HQContext implements IContext {
+public class HQContext {
     private static AppContext appContext;
     private static DependencyManager dependencyManager;
 
@@ -17,15 +17,14 @@ public class HQContext implements IContext {
         HQContext.dependencyManager = new DependencyManager(appContext);
     }
 
-    @Override
     public void start() {
         appContext.start();
         dependencyManager.start();
     }
 
-    @Override
     public void stop() {
-
+        appContext.stop();
+        dependencyManager.stop();
     }
 
     protected AppContext getAppContext() {
