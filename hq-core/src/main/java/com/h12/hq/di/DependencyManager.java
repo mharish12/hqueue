@@ -24,9 +24,8 @@ public class DependencyManager implements Serializable {
     }
 
     public void start() {
-//        System.out.println("Server port: " + appContext.getEnvironment().getProperty(Constants.SERVER_PORT));
-        this.diManager.prepare(appContext);
-        this.shutDownHookManager.prepare(appContext);
+        this.diManager.prepare(this);
+        this.shutDownHookManager.prepare(this);
         this.diManager.start();
         this.shutDownHookManager.start();
     }
