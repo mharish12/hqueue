@@ -2,4 +2,4 @@
 One place java framework for all your needs.
 
 ### Please find the flow diagrams
-[Diagrams](diagrams/flow_diagrams.drawio)
+![Diagrams](diagrams/class_diagram.drawio.svg)

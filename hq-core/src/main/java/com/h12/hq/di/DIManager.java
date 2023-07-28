@@ -1,33 +1,38 @@
 package com.h12.hq.di;
 
+import com.h12.hq.AppContext;
 import com.h12.hq.IManager;
 import com.h12.hq.IValidator;
+import com.h12.hq.di.impl.HQValidator;
 import com.h12.hq.exception.HQException;
-import com.h12.hq.exception.ValidationException;
-import com.h12.hq.AppContext;
 import com.h12.hq.util.Constants;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassGraphException;
 import io.github.classgraph.ScanResult;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.ValidatorFactory;
 
-import java.util.Set;
-
-public abstract class DIManager implements IManager, IValidator {
-    private final ValidatorFactory validatorFactory;
+public abstract class DIManager implements IManager {
+    private final IValidator validator;
 
     public DIManager() {
-        this(Validation.buildDefaultValidatorFactory());
+        this(new HQValidator());
     }
-    public DIManager(ValidatorFactory validatorFactory) {
-        this.validatorFactory = validatorFactory;
+    public DIManager(IValidator validator) {
+        this.validator = validator;
     }
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
         scanPackages(dependencyManager.getAppContext());
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
     }
 
     protected void scanPackages(AppContext appContext) {
@@ -42,21 +47,4 @@ public abstract class DIManager implements IManager, IValidator {
             throw new HQException(ex.getMessage(), ex);
         }
     }
-
-    @Override
-    public void validate(Object o) {
-        try {
-            Set<ConstraintViolation<Object>> violations =  validatorFactory.getValidator().validate(o);
-
-            if(violations.size() > 0) {
-                for (ConstraintViolation<Object> objectConstraintViolation: violations){
-                }
-            }
-        } catch (Exception e) {
-            ValidationException validationException = new ValidationException(e.getMessage());
-            validationException.addSuppressed(e);
-            throw e;
-        }
-    }
-
 }
