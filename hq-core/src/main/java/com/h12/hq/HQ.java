@@ -16,5 +16,6 @@ public class HQ {
     public static void start() {
         init();
         HQ.hqContext.start();
+        Runtime.getRuntime().gc();
     }
 }

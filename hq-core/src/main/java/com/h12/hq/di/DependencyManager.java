@@ -4,6 +4,7 @@ import com.h12.hq.IManager;
 import com.h12.hq.di.impl.DIManagerImpl;
 import com.h12.hq.hooks.ShutDownHookManager;
 import com.h12.hq.AppContext;
+import io.github.classgraph.ScanResult;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class DependencyManager implements Serializable {
     private final AppContext appContext;
     private final IManager diManager;
     private final IManager shutDownHookManager;
+    private static ScanResult scanResult;
 
     public DependencyManager() throws IOException {
         this(new AppContext());
@@ -37,5 +39,13 @@ public class DependencyManager implements Serializable {
 
     public AppContext getAppContext() {
         return appContext;
+    }
+
+    public ScanResult getScanResult() {
+        return scanResult;
+    }
+
+    public void setScanResult(ScanResult scanResult) {
+        DependencyManager.scanResult = scanResult;
     }
 }

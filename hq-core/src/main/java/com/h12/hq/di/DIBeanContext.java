@@ -1,6 +1,8 @@
 package com.h12.hq.di;
 
 import com.h12.hq.AppContext;
+import com.h12.hq.IContext;
+import com.h12.hq.IResource;
 import com.h12.hq.di.annotation.*;
 import com.h12.hq.util.Constants;
 import com.h12.hq.util.ReflectionUtil;
@@ -12,9 +14,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class DIBeanManager extends DIManager {
+public class DIBeanContext implements IContext {
     private AppContext appContext;
-    public DIBeanManager() {
+    public DIBeanContext() {
         super();
     }
 
@@ -25,6 +27,16 @@ public class DIBeanManager extends DIManager {
     @Override
     public void start() {
         startDI();
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public IResource getResource() {
+        return null;
     }
 
     private void startDI() {
@@ -58,7 +70,7 @@ public class DIBeanManager extends DIManager {
                     String name = beanAnnotation.qualifier();
                     if(name.equals(Constants.DEFAULT_BEAN_NAME)) {
                         name = method.getReturnType().getName();
-                    }//TODO: multiple bean check
+                    }//TODO: check if multiple bean exists
                     Object returnedBean = method.invoke(configurationClassBean);
                     appContext.getBeanFactory().put(name, returnedBean);
                 }
@@ -80,7 +92,7 @@ public class DIBeanManager extends DIManager {
                     }
                     Object injectableFieldObject = appContext.getBeanFactory().getBean(beanName);
                     field.setAccessible(true);
-                    field.set(classObject, injectableFieldObject);
+                    field.set(classObject, injectableFieldObject);//TODO: check if bean does not exists.
                     field.setAccessible(false);
                 } else if (annotation instanceof Value value) {
                     String propertyName = value.value();
@@ -94,11 +106,5 @@ public class DIBeanManager extends DIManager {
                 }
             }
         }
-    }
-
-
-    @Override
-    public void stop() {
-
     }
 }

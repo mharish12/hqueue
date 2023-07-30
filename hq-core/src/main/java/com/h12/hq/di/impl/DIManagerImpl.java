@@ -1,34 +1,38 @@
 package com.h12.hq.di.impl;
 
-import com.h12.hq.AppContext;
-import com.h12.hq.di.DIBeanManager;
+import com.h12.hq.IContext;
+import com.h12.hq.di.DIBeanContext;
 import com.h12.hq.di.DIManager;
 import com.h12.hq.di.DependencyManager;
 
 public class DIManagerImpl  extends DIManager {
-    private AppContext appContext;
-    private DIBeanManager diBeanManager;
+    private final DIBeanContext diBeanContext;
 
     public DIManagerImpl() {
         super();
-        this.diBeanManager = new DIBeanManager();
+        this.diBeanContext = new DIBeanContext();
     }
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
-        this.appContext = dependencyManager.getAppContext();
-        if(appContext.getScanResult() == null) {
-            scanPackages(appContext);
+        if(dependencyManager.getScanResult() == null) {
+            scanPackages(dependencyManager);
         }
+        this.diBeanContext.prepare(dependencyManager);
     }
 
     @Override
     public void start() {
-        diBeanManager.start();
+        diBeanContext.start();
     }
 
     @Override
     public void stop() {
-        diBeanManager.stop();
+        diBeanContext.stop();
+    }
+
+    @Override
+    public IContext getContext() {
+        return diBeanContext;
     }
 }

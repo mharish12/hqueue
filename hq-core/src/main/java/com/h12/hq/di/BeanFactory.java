@@ -1,9 +1,11 @@
 package com.h12.hq.di;
 
+import com.h12.hq.IResource;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeanFactory {
+public class BeanFactory implements IResource {
     private static Map<String, Object> beans;
 
     public BeanFactory() {
@@ -11,7 +13,8 @@ public class BeanFactory {
     }
 
     public <T> T getBean(Class<T> typeClass) {
-        return (T) getBean(typeClass.getName());
+        Object o = getBean(typeClass.getName());
+        return (T) o;
     }
 
     public Object getBean(String className) {
@@ -24,5 +27,20 @@ public class BeanFactory {
 
     public Object put(String name, Object object) {
         return beans.put(name, object);
+    }
+
+    @Override
+    public void prepare(DependencyManager dependencyManager) {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
     }
 }

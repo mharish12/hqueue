@@ -1,14 +1,17 @@
 package com.h12.hq.server;
 
 import com.h12.hq.AppContext;
+import com.h12.hq.di.DependencyManager;
 import com.h12.hq.server.http.AbstractIServer;
 import io.undertow.Undertow;
 
 public class UndertowServer extends AbstractIServer {
     private Undertow undertowServer;
     private Undertow.Builder builder;
+    private AppContext appContext;
     @Override
-    public void prepare(AppContext appContext) {
+    public void prepare(DependencyManager dependencyManager) {
+        this.appContext = dependencyManager.getAppContext();
         int port = super.getPort(appContext);
         String host = super.getHost(appContext);
         builder = Undertow.builder()
@@ -36,5 +39,15 @@ public class UndertowServer extends AbstractIServer {
             undertowServer.stop();
             undertowServer = null;
         }
+    }
+
+    @Override
+    public String getHost() {
+        return getHost(appContext);
+    }
+
+    @Override
+    public Integer getPort() {
+        return getPort(appContext);
     }
 }

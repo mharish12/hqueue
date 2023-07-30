@@ -44,6 +44,11 @@ public class AppContext implements IContext {
 
     }
 
+    @Override
+    public IResource getResource() {
+        return null;
+    }
+
     public ScanResult getScanResult() {
         return scanResult;
     }

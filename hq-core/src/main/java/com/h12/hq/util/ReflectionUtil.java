@@ -19,7 +19,7 @@ public class ReflectionUtil {
         return constructor.newInstance(args);
     }
 
-    public static Object newInstance(String fccn) throws ClassNotFoundException {
-        return Class.forName(fccn);
+    public static Class<?> getTypedClass(String fqcn) throws ClassNotFoundException {
+        return Class.forName(fqcn);
     }
 }
