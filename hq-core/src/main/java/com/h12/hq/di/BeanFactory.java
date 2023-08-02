@@ -1,5 +1,6 @@
 package com.h12.hq.di;
 
+import com.h12.hq.DependencyManager;
 import com.h12.hq.IResource;
 
 import java.util.HashMap;

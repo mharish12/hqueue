@@ -3,9 +3,9 @@ package com.h12.hq.di.impl;
 import com.h12.hq.IContext;
 import com.h12.hq.di.DIBeanContext;
 import com.h12.hq.di.DIManager;
-import com.h12.hq.di.DependencyManager;
+import com.h12.hq.DependencyManager;
 
-public class DIManagerImpl  extends DIManager {
+public class DIManagerImpl extends DIManager {
     private final DIBeanContext diBeanContext;
 
     public DIManagerImpl() {

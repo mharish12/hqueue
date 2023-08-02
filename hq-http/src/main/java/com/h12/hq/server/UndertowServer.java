@@ -1,9 +1,12 @@
 package com.h12.hq.server;
 
 import com.h12.hq.AppContext;
-import com.h12.hq.di.DependencyManager;
+import com.h12.hq.DependencyManager;
+import com.h12.hq.di.annotation.Controller;
 import com.h12.hq.server.http.AbstractIServer;
 import io.undertow.Undertow;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.PathHandler;
 
 public class UndertowServer extends AbstractIServer {
     private Undertow undertowServer;
@@ -14,8 +17,18 @@ public class UndertowServer extends AbstractIServer {
         this.appContext = dependencyManager.getAppContext();
         int port = super.getPort(appContext);
         String host = super.getHost(appContext);
+
+//        Undertow.ListenerBuilder listenerBuilder = new Undertow.ListenerBuilder();
         builder = Undertow.builder()
                 .addHttpListener(port, host);
+        builder.addHttpListener(getPort(), getHost(), registerHandler(dependencyManager));
+    }
+
+    private HttpHandler registerHandler(DependencyManager dependencyManager) {
+        PathHandler handler = new PathHandler(10);
+        dependencyManager.getScanResult().getClassesWithAnnotation(Controller.class);
+//        handler.
+        return handler;
     }
 
     @Override

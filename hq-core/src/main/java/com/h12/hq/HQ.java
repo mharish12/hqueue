@@ -18,4 +18,8 @@ public class HQ {
         HQ.hqContext.start();
         Runtime.getRuntime().gc();
     }
+
+    public static void stop() {
+        HQ.hqContext.stop();
+    }
 }

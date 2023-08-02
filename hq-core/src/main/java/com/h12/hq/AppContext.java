@@ -1,23 +1,24 @@
 package com.h12.hq;
 
 import com.h12.hq.di.BeanFactory;
-import com.h12.hq.di.DependencyManager;
+import com.h12.hq.di.BeanManager;
 import io.github.classgraph.ScanResult;
 
 import java.io.IOException;
 
-public class AppContext implements IContext {
+public class AppContext extends AbstractContext {
     private final Environment environment;
-    private final BeanFactory beanFactory;
-    private ScanResult scanResult;
+    private final BeanManager beanManager;
+    private final AppResource appResource;
 
     public AppContext() throws IOException {
-        this(new Environment(), new BeanFactory());
+        this(new Environment(), new BeanManager());
     }
 
-    public AppContext(Environment environment, BeanFactory beanFactory) {
+    public AppContext(Environment environment, BeanManager beanManager) {
         this.environment = environment;
-        this.beanFactory = beanFactory;
+        this.beanManager = beanManager;
+        this.appResource = new AppResource();
     }
 
     public Environment getEnvironment() {
@@ -25,35 +26,35 @@ public class AppContext implements IContext {
     }
 
     public BeanFactory getBeanFactory() {
-        return beanFactory;
+        return appResource.getFactory();
     }
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
-
+        this.beanManager.prepare(dependencyManager);
     }
 
     @Override
     public void start() {
-        //No implementation.
-
+        this.beanManager.start();
+        this.appResource.setFactory((BeanFactory) beanManager.getContext().getResource());
     }
 
     @Override
     public void stop() {
-
+        this.beanManager.stop();
     }
 
     @Override
     public IResource getResource() {
-        return null;
+        return appResource.getFactory();
     }
 
     public ScanResult getScanResult() {
-        return scanResult;
+        return appResource.getScanResult();
     }
 
     public void setScanResult(ScanResult scanResult) {
-        this.scanResult = scanResult;
+        this.appResource.setScanResult(scanResult);
     }
 }

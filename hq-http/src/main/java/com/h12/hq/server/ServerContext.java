@@ -1,7 +1,7 @@
 package com.h12.hq.server;
 
 import com.h12.hq.IContext;
-import com.h12.hq.di.DependencyManager;
+import com.h12.hq.DependencyManager;
 import com.h12.hq.server.exception.ServerException;
 import com.h12.hq.IResource;
 import com.h12.hq.util.Constants;

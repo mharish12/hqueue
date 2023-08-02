@@ -1,26 +1,26 @@
-package com.h12.hq.server;
+package com.h12.hq.di;
 
-import com.h12.hq.IContext;
-import com.h12.hq.IManager;
+import com.h12.hq.AbstractManager;
 import com.h12.hq.DependencyManager;
+import com.h12.hq.IContext;
 
-public class ServerManager implements IManager {
+public class BeanManager extends AbstractManager {
     private IContext iContext;
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
-        this.iContext = new ServerContext();
-        this.iContext.prepare(dependencyManager);
+        iContext = new DIBeanContext();
+        iContext.prepare(dependencyManager);
     }
 
     @Override
     public void start() {
-        this.iContext.start();
+        iContext.start();
     }
 
     @Override
     public void stop() {
-        this.iContext.stop();
+        iContext.stop();
     }
 
     @Override
