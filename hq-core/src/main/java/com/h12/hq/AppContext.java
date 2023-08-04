@@ -26,7 +26,11 @@ public class AppContext extends AbstractContext {
     }
 
     public BeanFactory getBeanFactory() {
-        return appResource.getFactory();
+        return appResource.getBeanFactory();
+    }
+
+    public boolean hasBean(Class<?> clazz) {
+        return appResource.getBeanFactory().hasBean(clazz);
     }
 
     @Override
@@ -37,7 +41,7 @@ public class AppContext extends AbstractContext {
     @Override
     public void start() {
         this.beanManager.start();
-        this.appResource.setFactory((BeanFactory) beanManager.getContext().getResource());
+        this.appResource.setBeanFactory((BeanFactory) beanManager.getContext().getResource());
     }
 
     @Override
@@ -47,7 +51,7 @@ public class AppContext extends AbstractContext {
 
     @Override
     public IResource getResource() {
-        return appResource.getFactory();
+        return appResource.getBeanFactory();
     }
 
     public ScanResult getScanResult() {

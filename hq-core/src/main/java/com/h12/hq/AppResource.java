@@ -6,15 +6,15 @@ import io.github.classgraph.ScanResult;
 import java.io.Serializable;
 
 public class AppResource extends AbstractResource implements Serializable {
-    private static BeanFactory factory;
+    private static BeanFactory beanFactory;
     private static ScanResult scanResult;
 
-    public BeanFactory getFactory() {
-        return factory;
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
     }
 
-    public void setFactory(BeanFactory factory) {
-        AppResource.factory = factory;
+    public void setBeanFactory(BeanFactory factory) {
+        AppResource.beanFactory = factory;
     }
 
     public ScanResult getScanResult() {

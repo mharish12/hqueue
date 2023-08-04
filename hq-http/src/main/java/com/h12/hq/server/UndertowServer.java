@@ -2,7 +2,6 @@ package com.h12.hq.server;
 
 import com.h12.hq.AppContext;
 import com.h12.hq.DependencyManager;
-import com.h12.hq.di.annotation.Controller;
 import com.h12.hq.server.http.AbstractIServer;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
@@ -26,7 +25,7 @@ public class UndertowServer extends AbstractIServer {
 
     private HttpHandler registerHandler(DependencyManager dependencyManager) {
         PathHandler handler = new PathHandler(10);
-        dependencyManager.getScanResult().getClassesWithAnnotation(Controller.class);
+
 //        handler.
         return handler;
     }

@@ -1,33 +1,31 @@
-package com.h12.hq.di.impl;
+package com.h12.hq;
 
-import com.h12.hq.IValidator;
 import com.h12.hq.exception.ValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 import java.util.Set;
 
-public class HQValidator implements IValidator {
-//    private final ValidatorFactory validatorFactory;
-    private final Validator validator;
+public abstract class HQValidator implements IValidator {
+    protected final ValidatorFactory validatorFactory;
 
     public HQValidator() {
         this(Validation.buildDefaultValidatorFactory());
     }
+
     public HQValidator(ValidatorFactory validatorFactory) {
-//        this.validatorFactory = validatorFactory;
-        this.validator = validatorFactory.getValidator();
+        this.validatorFactory = validatorFactory;
     }
 
     @Override
     public void validate(Object o) throws ValidationException {
         try {
-            Set<ConstraintViolation<Object>> violations =  validator.validate(o);
+            Set<ConstraintViolation<Object>> violations = validatorFactory.getValidator().validate(o);
 
-            if(violations.size() > 0) {
-                for (ConstraintViolation<Object> objectConstraintViolation: violations){
+            if (!violations.isEmpty()) {
+                for (ConstraintViolation<Object> constraintViolation : violations) {
+
                 }
             }
         } catch (Exception e) {
@@ -35,6 +33,5 @@ public class HQValidator implements IValidator {
             validationException.addSuppressed(e);
             throw e;
         }
-
     }
 }

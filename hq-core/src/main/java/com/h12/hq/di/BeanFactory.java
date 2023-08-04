@@ -1,12 +1,13 @@
 package com.h12.hq.di;
 
+import com.h12.hq.AbstractResource;
 import com.h12.hq.DependencyManager;
 import com.h12.hq.IResource;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeanFactory implements IResource {
+public class BeanFactory extends AbstractResource {
     private static Map<String, Object> beans;
 
     public BeanFactory() {
@@ -30,18 +31,11 @@ public class BeanFactory implements IResource {
         return beans.put(name, object);
     }
 
-    @Override
-    public void prepare(DependencyManager dependencyManager) {
-
+    public Object put(Class<?> clazz, Object object) {
+        return put(clazz.getName(), object);
     }
 
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void stop() {
-
+    public boolean hasBean(Class<?> clazz) {
+        return beans.containsKey(clazz.getName());
     }
 }

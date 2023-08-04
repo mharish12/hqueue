@@ -4,6 +4,7 @@ import com.h12.hq.IContext;
 import com.h12.hq.DependencyManager;
 import com.h12.hq.server.exception.ServerException;
 import com.h12.hq.IResource;
+import com.h12.hq.server.http.IServer;
 import com.h12.hq.util.Constants;
 import com.h12.hq.util.ReflectionUtil;
 
@@ -11,7 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class ServerContext implements IContext {
-    private IResource iResource;
+    private IServer iServer;
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
@@ -22,8 +23,8 @@ public class ServerContext implements IContext {
         try {
             Class<?> serverClass = ReflectionUtil.getTypedClass(serverClassString);
             Constructor<?> constructor = serverClass.getDeclaredConstructor();
-            iResource = (IResource) constructor.newInstance();
-            iResource.prepare(dependencyManager);
+            iServer = (IServer) constructor.newInstance();
+            iServer.prepare(dependencyManager);
         } catch (ClassNotFoundException |
                  InvocationTargetException |
                  NoSuchMethodException |
@@ -35,16 +36,16 @@ public class ServerContext implements IContext {
 
     @Override
     public void start() {
-        iResource.start();
+        iServer.start();
     }
 
     @Override
     public void stop() {
-        iResource.stop();
+        iServer.stop();
     }
 
     @Override
     public IResource getResource() {
-        return iResource;
+        return iServer;
     }
 }
