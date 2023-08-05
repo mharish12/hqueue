@@ -1,11 +1,11 @@
 package com.h12.hq.server.http;
 
 import com.h12.hq.IResource;
-import com.h12.hq.hooks.IShutDownHook;
 import com.h12.hq.AppContext;
+import com.h12.hq.hooks.ShutDownHook;
 import com.h12.hq.util.Constants;
 
-public abstract class AbstractIServer implements IResource, IServer, IShutDownHook {
+public abstract class AbstractIServer extends ShutDownHook implements IResource, IServer {
     public int getPort(AppContext appContext) {
         return Integer.parseInt(appContext.getEnvironment().getProperty(Constants.SERVER_PORT, Constants.DEFAULT_SERVER_PORT));
     }

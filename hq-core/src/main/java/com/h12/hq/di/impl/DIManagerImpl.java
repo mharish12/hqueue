@@ -1,9 +1,9 @@
 package com.h12.hq.di.impl;
 
+import com.h12.hq.DependencyManager;
 import com.h12.hq.IContext;
 import com.h12.hq.di.DIBeanContext;
 import com.h12.hq.di.DIManager;
-import com.h12.hq.DependencyManager;
 
 public class DIManagerImpl extends DIManager {
     private final DIBeanContext diBeanContext;
@@ -15,9 +15,7 @@ public class DIManagerImpl extends DIManager {
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
-        if(dependencyManager.getScanResult() == null) {
-            scanPackages(dependencyManager);
-        }
+        scanPackages(dependencyManager);
         this.diBeanContext.prepare(dependencyManager);
     }
 

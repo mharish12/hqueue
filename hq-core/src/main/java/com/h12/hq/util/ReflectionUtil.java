@@ -16,7 +16,7 @@ public class ReflectionUtil {
     }
 
     public static <T> T newInstanceIfNotInterface(Class<T> tClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        if (!tClass.isInterface()) {
+        if (tClass.isInterface()) {
             return null;
         }
         return newInstance(tClass.getDeclaredConstructor());

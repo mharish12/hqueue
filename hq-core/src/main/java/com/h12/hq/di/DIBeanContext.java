@@ -18,22 +18,14 @@ import java.lang.reflect.Method;
 
 public class DIBeanContext extends AbstractContext {
     private DependencyManager dependencyManager;
-    private IResource iResource;
 
     public void prepare(DependencyManager dependencyManager) {
-        iResource = new BeanFactory();
-        iResource.prepare(dependencyManager);
         this.dependencyManager = dependencyManager;
     }
 
     @Override
     public void start() {
         startDI();
-    }
-
-    @Override
-    public IResource getResource() {
-        return iResource;
     }
 
     private void startDI() {
@@ -48,22 +40,8 @@ public class DIBeanContext extends AbstractContext {
 
     private void startControllerDI() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ClassInfoList controllerClassInfoList = dependencyManager.getAppContext().getScanResult().getClassesWithAnnotation(Controller.class);
-//        ClassInfoList componentClassInfoList = dependencyManager.getAppContext().getScanResult().getClassesWithAnnotation(Component.class);
-//        Queue<Object> diQueue = new LinkedList<>();
         for (ClassInfo classInfo : controllerClassInfoList) {
             Object classObject = ReflectionUtil.newInstance(classInfo.loadClass());
-//            FieldInfoList fieldInfoList = classInfo.getDeclaredFieldInfo();
-//            for (FieldInfo fieldInfo : fieldInfoList) {
-//                boolean hasAutoWireAnnotation = fieldInfo.hasAnnotation(AutoWire.class);
-//                boolean hasValueAnnotation = fieldInfo.hasAnnotation(Value.class);
-//                if (hasValueAnnotation && hasAutoWireAnnotation) {
-//                    throw new HQException("A field cannot have both " + Value.class.getName() + " and " + AutoWire.class.getName() + " annotations.");
-//                } else if (hasValueAnnotation) {
-//                    injectValueToField(fieldInfo, fieldInfo.getAnnotationInfo(Value.class).loadClassAndInstantiate(), classObject);
-//                } else if (hasAutoWireAnnotation) {
-//                    injectAutoWireToField(fieldInfo, fieldInfo.getAnnotationInfo(AutoWire.class).loadClassAndInstantiate(), classObject);
-//                }
-//            }
             iteratorForFieldAnnotationAndInject(classInfo, classObject);
         }
     }
@@ -93,6 +71,10 @@ public class DIBeanContext extends AbstractContext {
                 }
             }
         }
+    }
+
+    private void superClassInjection(ClassInfo childClass, Object classObject) {
+
     }
 
     private void setFields(ClassInfo classInfo, Object classObject) throws IllegalAccessException {
@@ -131,11 +113,11 @@ public class DIBeanContext extends AbstractContext {
         if (isService) {
             iteratorForFieldAnnotationAndInject(classInfo, BeanUtils.newAndUpdateFactory(dependencyManager, clazz));
         } else if (isComponent) {
-
+            iteratorForFieldAnnotationAndInject(classInfo, BeanUtils.newAndUpdateFactory(dependencyManager, clazz));
         }
     }
 
-    private Object injectAutoWireToClassWithNewObject(Class<?> clazz) throws IllegalAccessException {
+    private Object injectAutoWireWithNewObject(Class<?> clazz) throws IllegalAccessException {
         if (!clazz.isInterface()) {
             Object o = BeanUtils.newAndUpdateFactory(dependencyManager, clazz);
             findAnnotationAndInjectForClass(clazz, o);
@@ -149,12 +131,15 @@ public class DIBeanContext extends AbstractContext {
         AutoWire autoWire = (AutoWire) annotation;
         Field field = fieldInfo.loadClassAndGetField();
         //TODO: inject subclass/superclass AutoWire fields.
-        Object o = injectAutoWireToClassWithNewObject(field.getDeclaringClass());
+
         String beanName = autoWire.qualifier();
         if (beanName.equals(Constants.DEFAULT_BEAN_NAME)) {
             beanName = fieldInfo.getName();
         }
         Object injectableFieldObject = dependencyManager.getAppContext().getBeanFactory().getBean(beanName);
+        if(injectableFieldObject == null) {
+            injectableFieldObject = injectAutoWireWithNewObject(field.getDeclaringClass());
+        }
         field.setAccessible(true);
         field.set(classObject, injectableFieldObject);//TODO: check if bean does not exists.
         field.setAccessible(false);

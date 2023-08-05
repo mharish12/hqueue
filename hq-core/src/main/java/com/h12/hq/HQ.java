@@ -1,5 +1,7 @@
 package com.h12.hq;
 
+import com.h12.hq.exception.HQException;
+
 import java.io.IOException;
 
 public class HQ {
@@ -7,7 +9,11 @@ public class HQ {
 
     private static void init() {
         try {
-            HQ.hqContext = new HQContext();
+            if(HQ.hqContext == null) {
+                HQ.hqContext = new HQContext();
+            } else {
+                throw new HQException("Trying to create multiple sessions.");
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,7 +1,6 @@
 package com.h12.hq;
 
 import com.h12.hq.di.BeanFactory;
-import com.h12.hq.di.BeanManager;
 import io.github.classgraph.ScanResult;
 
 import java.io.IOException;
@@ -19,18 +18,6 @@ public class AppContext extends AbstractContext {
         this.environment = environment;
         this.beanManager = beanManager;
         this.appResource = new AppResource();
-    }
-
-    public Environment getEnvironment() {
-        return this.environment;
-    }
-
-    public BeanFactory getBeanFactory() {
-        return appResource.getBeanFactory();
-    }
-
-    public boolean hasBean(Class<?> clazz) {
-        return appResource.getBeanFactory().hasBean(clazz);
     }
 
     @Override
@@ -51,6 +38,14 @@ public class AppContext extends AbstractContext {
 
     @Override
     public IResource getResource() {
+        return appResource.getBeanFactory();
+    }
+
+    public Environment getEnvironment() {
+        return this.environment;
+    }
+
+    public BeanFactory getBeanFactory() {
         return appResource.getBeanFactory();
     }
 

@@ -17,7 +17,7 @@ public class BeanUtils {
     }
 
     public static Object newAndUpdateFactoryIfNotExists(DependencyManager dependencyManager, Class<?> clazz) {
-        if (dependencyManager.getAppContext().hasBean(clazz)) {
+        if (dependencyManager.getAppContext().getBeanFactory().hasBean(clazz)) {
             return dependencyManager.getAppContext().getBeanFactory().getBean(clazz);
         } else {
             return newAndUpdateFactory(dependencyManager, clazz);

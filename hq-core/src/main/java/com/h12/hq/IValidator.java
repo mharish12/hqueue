@@ -1,14 +1,14 @@
 package com.h12.hq;
 
-import com.h12.hq.exception.ValidationException;
+import com.h12.hq.exception.HQValidationException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 
 public interface IValidator {
-    void validate(Object o) throws ValidationException;
-    void validate(Method method) throws ValidationException;
-    void validate(Parameter parameter) throws ValidationException;
-    void validate(Field field) throws ValidationException;
+    void validate(Object o) throws HQValidationException;
+    void validate(Object classObject, Method method, Object ...args) throws HQValidationException;
+    void validateReturnValue(Object classObject, Method method, Object returnValue) throws HQValidationException;
+//    void validate(Parameter parameter, Object classObject, Object ...args) throws HQValidationException;
+    void validate(Field field, Object classObject) throws HQValidationException;
 }

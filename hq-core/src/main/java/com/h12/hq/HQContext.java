@@ -18,6 +18,8 @@ public class HQContext {
         HQContext.appContext = new AppContext();
         HQContext.dependencyManager = new DependencyManager(appContext);
         HQContext.shutDownHookManager = new ShutDownHookManager();
+        appContext.prepare(dependencyManager);
+        dependencyManager.prepare();
         shutDownHookManager.prepare(dependencyManager);
     }
 

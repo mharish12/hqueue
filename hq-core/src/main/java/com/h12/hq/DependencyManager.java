@@ -1,10 +1,7 @@
 package com.h12.hq;
 
-import com.h12.hq.AppResource;
-import com.h12.hq.IManager;
 import com.h12.hq.di.impl.DIManagerImpl;
 import com.h12.hq.hooks.ShutDownHookManager;
-import com.h12.hq.AppContext;
 import com.h12.hq.server.http.impl.RouteManager;
 import io.github.classgraph.ScanResult;
 
@@ -26,9 +23,14 @@ public class DependencyManager implements Serializable {
         this.diManager = new DIManagerImpl();
         this.shutDownHookManager = new ShutDownHookManager();
         this.routeManager = new RouteManager();
+    }
+
+    void prepare() {
         this.diManager.prepare(this);
         this.shutDownHookManager.prepare(this);
         this.routeManager.prepare(this);
+        this.appContext.prepare(this);
+        this.appContext.start();
     }
 
     void start() {
@@ -41,6 +43,7 @@ public class DependencyManager implements Serializable {
         this.diManager.stop();
         this.shutDownHookManager.stop();
         this.routeManager.stop();
+        this.appContext.stop();
     }
 
     public AppContext getAppContext() {
@@ -48,10 +51,10 @@ public class DependencyManager implements Serializable {
     }
 
     public ScanResult getScanResult() {
-        return ((AppResource)appContext.getResource()).getScanResult();
+        return appContext.getScanResult();
     }
 
     public void setScanResult(ScanResult scanResult) {
-        ((AppResource)appContext.getResource()).setScanResult(scanResult);
+        appContext.setScanResult(scanResult);
     }
 }

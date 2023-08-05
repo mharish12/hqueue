@@ -10,6 +10,7 @@ import io.github.classgraph.ScanResult;
 
 public abstract class DIManager extends AbstractManager {
 
+    protected static ScanResult scanResult;
     protected DIManager() {}
 
     @Override
@@ -28,7 +29,8 @@ public abstract class DIManager extends AbstractManager {
         classGraph
                 .enableAllInfo()
                 .acceptPackages(packageToScan);
-        try(ScanResult scanResult = classGraph.scan()) {
+        try {
+            scanResult = classGraph.scan();
             dependencyManager.setScanResult(scanResult);
         } catch (ClassGraphException ex) {
             throw new HQException(ex.getMessage(), ex);
