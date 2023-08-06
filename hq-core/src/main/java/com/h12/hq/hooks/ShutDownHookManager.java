@@ -5,8 +5,12 @@ import com.h12.hq.DependencyManager;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ClassInfoList;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ShutDownHookManager extends AbstractManager {
     private DependencyManager dependencyManager;
+    private static final Set<String> registeredHooks = new HashSet<>();
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
@@ -19,8 +23,16 @@ public class ShutDownHookManager extends AbstractManager {
         ClassInfoList classInfoList = dependencyManager.getScanResult().getClassesImplementing(IShutDownHook.class);
         for (ClassInfo classInfo : classInfoList) {
             String hookName = classInfo.getName();
-            IShutDownHook resource = (IShutDownHook) dependencyManager.getAppContext().getBeanFactory().getBean(hookName);
-            runtime.addShutdownHook(new Thread(resource));
+            if(!classInfo.isInterfaceOrAnnotation()
+                    && !classInfo.isAbstract()
+                    && !classInfo.isAnonymousInnerClass()
+                    && classInfo.isPublic()) {
+                if(!registeredHooks.contains(hookName)) {
+                    IShutDownHook resource = (IShutDownHook) dependencyManager.getAppContext().getBeanFactory().getBean(hookName);
+                    runtime.addShutdownHook(new Thread(resource));
+                    registeredHooks.add(hookName);
+                }
+            }
         }
 //        runtime.gc();
     }

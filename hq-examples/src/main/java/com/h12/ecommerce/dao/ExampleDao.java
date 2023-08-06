@@ -11,18 +11,22 @@ import java.util.Map;
 @Component()
 public class ExampleDao extends ShutDownHook {
     private final Logger logger = LoggerFactory.getLogger(ExampleDao.class);
-    Map<String, String> daoMap;
+    private final Map<String, String> daoMap;
 
     public ExampleDao() {
         this.daoMap = new HashMap<>();
     }
 
     public String getString(String key) {
-        return daoMap.get(key);
+        return "TEST STRING";
+    }
+
+    public void put(String key, String value) {
+        daoMap.put(key, value);
     }
 
     @Override
     public void shutdown() {
-        logger.info("Called shutdown hook.");
+        logger.info(this.getClass().getName() + " Called shutdown hook.");
     }
 }

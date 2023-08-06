@@ -138,7 +138,13 @@ public class DIBeanContext extends AbstractContext {
         }
         Object injectableFieldObject = dependencyManager.getAppContext().getBeanFactory().getBean(beanName);
         if(injectableFieldObject == null) {
-            injectableFieldObject = injectAutoWireWithNewObject(field.getDeclaringClass());
+            Class<?> fieldType = field.getType();
+            if(!fieldType.isInterface()
+                    && !fieldType.isPrimitive()
+                    && !fieldType.isAnnotation()
+                    && !fieldType.isAnonymousClass()) {
+                injectableFieldObject = injectAutoWireWithNewObject(fieldType);
+            }
         }
         field.setAccessible(true);
         field.set(classObject, injectableFieldObject);//TODO: check if bean does not exists.
