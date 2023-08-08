@@ -7,7 +7,7 @@ import com.h12.hq.di.annotation.Service;
 @Service
 public class ExampleService {
     @AutoWire
-    private ExampleDao exampleDao;
+    private ExampleDao exampleDao;//TODO: Not injecting the bean here.
 
     public String getString() {
         return exampleDao.getString("");

@@ -1,41 +1,46 @@
 package com.h12.hq;
 
 import com.h12.hq.di.impl.DIManagerImpl;
-import com.h12.hq.server.http.impl.RouteManager;
+import com.h12.hq.server.ServerManager;
 import io.github.classgraph.ScanResult;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DependencyManager implements Serializable {
     private final AppContext appContext;
-    private final IManager diManager;
-    private final IManager routeManager;
+    private final Map<String, IManager> managers;
 
     public DependencyManager() throws IOException {
         this(new AppContext());
     }
 
     public DependencyManager(AppContext appContext) {
+        this.managers = new TreeMap<>();
         this.appContext = appContext;
-        this.diManager = new DIManagerImpl();
-        this.routeManager = new RouteManager();
+        managers.put(DIManagerImpl.class.getName(), new DIManagerImpl());
+        managers.put(ServerManager.class.getName(), new ServerManager());
     }
 
     void prepare() {
-        this.diManager.prepare(this);
-        this.routeManager.prepare(this);
         this.appContext.start();
+        for(Map.Entry<String, IManager> managerEntry: managers.entrySet()) {
+            managerEntry.getValue().prepare(this);
+        }
     }
 
     void start() {
-        this.diManager.start();
-        this.routeManager.start();
+        for(Map.Entry<String, IManager> managerEntry: managers.entrySet()) {
+            managerEntry.getValue().start();
+        }
     }
 
     void stop() {
-        this.diManager.stop();
-        this.routeManager.stop();
+        for(Map.Entry<String, IManager> managerEntry: managers.entrySet()) {
+            managerEntry.getValue().stop();
+        }
     }
 
     public AppContext getAppContext() {

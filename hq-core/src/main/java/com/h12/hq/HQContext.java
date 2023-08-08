@@ -31,11 +31,12 @@ public class HQContext {
         dependencyManager.start();
         shutDownHookManager.start();
 
-        try {
-            Thread.sleep(5000); // Simulating some work being done by the application
-        } catch (InterruptedException e) {
-            logger.info(e.getMessage(), e);
-        }
+//        try {
+//            Thread.sleep(5000); // Simulating some work being done by the application
+//        } catch (InterruptedException e) {
+//            logger.info(e.getMessage(), e);
+//        }
+        logger.info("Application started.");
     }
 
     void stop() {

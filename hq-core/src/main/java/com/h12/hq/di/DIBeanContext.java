@@ -2,7 +2,6 @@ package com.h12.hq.di;
 
 import com.h12.hq.AbstractContext;
 import com.h12.hq.DependencyManager;
-import com.h12.hq.IResource;
 import com.h12.hq.di.annotation.*;
 import com.h12.hq.exception.HQException;
 import com.h12.hq.util.BeanUtils;
@@ -41,7 +40,8 @@ public class DIBeanContext extends AbstractContext {
     private void startControllerDI() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         ClassInfoList controllerClassInfoList = dependencyManager.getAppContext().getScanResult().getClassesWithAnnotation(Controller.class);
         for (ClassInfo classInfo : controllerClassInfoList) {
-            Object classObject = ReflectionUtil.newInstance(classInfo.loadClass());
+            Object classObject = BeanUtils.getOrNewAndUpdateFactory(dependencyManager, classInfo.loadClass());
+            Object newClassObject = ReflectionUtil.newInstance(classInfo.loadClass());
             iteratorForFieldAnnotationAndInject(classInfo, classObject);
         }
     }

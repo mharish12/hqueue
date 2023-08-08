@@ -1,8 +1,6 @@
 package com.h12.hq.server.http;
 
-import com.h12.hq.IResource;
-
-public interface IServer extends IResource {
+public interface IServer {
     String getHost();
     Integer getPort();
 }

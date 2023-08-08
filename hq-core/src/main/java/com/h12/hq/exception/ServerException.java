@@ -1,4 +1,4 @@
-package com.h12.hq.server.exception;
+package com.h12.hq.exception;
 
 public class ServerException extends RuntimeException {
     public ServerException(String msg) {

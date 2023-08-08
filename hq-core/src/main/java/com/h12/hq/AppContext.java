@@ -1,9 +1,11 @@
 package com.h12.hq;
 
 import com.h12.hq.di.BeanFactory;
+import io.github.classgraph.MethodInfo;
 import io.github.classgraph.ScanResult;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class AppContext extends AbstractContext {
     private final Environment environment;
@@ -39,6 +41,14 @@ public class AppContext extends AbstractContext {
     @Override
     public IResource getResource() {
         return appResource.getBeanFactory();
+    }
+
+    public Map<String, MethodInfo> getRoutes() {
+        return appResource.getRoutes();
+    }
+
+    public void putRoute(String path, MethodInfo methodInfo) {
+        appResource.putRoute(path, methodInfo);
     }
 
     public Environment getEnvironment() {
