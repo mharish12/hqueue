@@ -5,9 +5,9 @@ import com.h12.hq.di.annotation.AutoWire;
 import com.h12.hq.di.annotation.Service;
 
 @Service
-public class ExampleService {
+public class ExampleService extends HelloService {
     @AutoWire
-    private ExampleDao exampleDao;//TODO: Not injecting the bean here.
+    private ExampleDao exampleDao;
 
     public String getString() {
         return exampleDao.getString("");

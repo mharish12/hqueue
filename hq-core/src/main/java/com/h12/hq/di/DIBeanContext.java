@@ -72,8 +72,16 @@ public class DIBeanContext extends AbstractContext {
         }
     }
 
-    private void superClassInjection(ClassInfo childClass, Object classObject) {
-
+    private void superClassInjection(ClassInfo childClass, Object classObject) throws IllegalAccessException {
+        if (!childClass.isInterface() && !childClass.isAnnotation()) {
+            ClassInfo supperClass = childClass.getSuperclass();
+            if (supperClass != null
+                    && !supperClass.isAnnotation()
+                    && !supperClass.isInterface()) {
+                superClassInjection(supperClass, classObject);
+                setFields(supperClass, classObject);
+            }
+        }
     }
 
     private void setFields(ClassInfo classInfo, Object classObject) throws IllegalAccessException {
@@ -120,6 +128,7 @@ public class DIBeanContext extends AbstractContext {
         Class<?> clazz = classInfo.loadClass();
         if (!classInfo.isInterface()) {
             Object o = BeanUtils.getOrNewAndUpdateFactory(dependencyManager, clazz);
+            superClassInjection(classInfo, o);
             findAnnotationOnClassAndInjectFields(clazz, o);
             return o;
         } else {
@@ -138,8 +147,8 @@ public class DIBeanContext extends AbstractContext {
             beanName = fieldType.getName();
         }
         Object injectableFieldObject = dependencyManager.getAppContext().getBeanFactory().getBean(beanName);
-        if(injectableFieldObject == null) {
-            if(!fieldType.isInterface() && !fieldType.isAnonymousClass()) {
+        if (injectableFieldObject == null) {
+            if (!fieldType.isInterface() && !fieldType.isAnonymousClass()) {
                 ClassInfo thisFieldClassInfo = dependencyManager.getScanResult().getClassInfo(fieldType.getName());
                 injectableFieldObject = autoWireWithNewObject(thisFieldClassInfo);
             }
