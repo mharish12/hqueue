@@ -41,8 +41,7 @@ public class DIBeanContext extends AbstractContext {
         ClassInfoList controllerClassInfoList = dependencyManager.getAppContext().getScanResult().getClassesWithAnnotation(Controller.class);
         for (ClassInfo classInfo : controllerClassInfoList) {
             Object classObject = BeanUtils.getOrNewAndUpdateFactory(dependencyManager, classInfo.loadClass());
-            Object newClassObject = ReflectionUtil.newInstance(classInfo.loadClass());
-            iteratorForFieldAnnotationAndInject(classInfo, classObject);
+            iteratorForFieldsAnnotationAndInject(classInfo, classObject);
         }
     }
 
@@ -92,7 +91,7 @@ public class DIBeanContext extends AbstractContext {
         }
     }
 
-    private void iteratorForFieldAnnotationAndInject(ClassInfo classInfo, Object classObject) throws IllegalAccessException {
+    private void iteratorForFieldsAnnotationAndInject(ClassInfo classInfo, Object classObject) throws IllegalAccessException {
         for (FieldInfo fieldInfo : classInfo.getDeclaredFieldInfo()) {
             boolean hasAutoWireAnnotation = fieldInfo.hasAnnotation(AutoWire.class);
             boolean hasValueAnnotation = fieldInfo.hasAnnotation(Value.class);
@@ -106,24 +105,25 @@ public class DIBeanContext extends AbstractContext {
         }
     }
 
-    private void findAnnotationAndInjectForClass(Class<?> clazz, Object classObjectWhereInjectingClassExists) throws IllegalAccessException {
+    private void findAnnotationOnClassAndInjectFields(Class<?> clazz, Object classObject) throws IllegalAccessException {
         ClassInfo classInfo = dependencyManager.getScanResult().getClassInfo(clazz.getName());
         boolean isService = classInfo.hasAnnotation(Service.class);
         boolean isComponent = classInfo.hasAnnotation(Component.class);
         if (isService) {
-            iteratorForFieldAnnotationAndInject(classInfo, BeanUtils.newAndUpdateFactory(dependencyManager, clazz));
+            iteratorForFieldsAnnotationAndInject(classInfo, classObject);
         } else if (isComponent) {
-            iteratorForFieldAnnotationAndInject(classInfo, BeanUtils.newAndUpdateFactory(dependencyManager, clazz));
+            iteratorForFieldsAnnotationAndInject(classInfo, classObject);
         }
     }
 
-    private Object injectAutoWireWithNewObject(Class<?> clazz) throws IllegalAccessException {
-        if (!clazz.isInterface()) {
-            Object o = BeanUtils.newAndUpdateFactory(dependencyManager, clazz);
-            findAnnotationAndInjectForClass(clazz, o);
+    private Object autoWireWithNewObject(ClassInfo classInfo) throws IllegalAccessException {
+        Class<?> clazz = classInfo.loadClass();
+        if (!classInfo.isInterface()) {
+            Object o = BeanUtils.getOrNewAndUpdateFactory(dependencyManager, clazz);
+            findAnnotationOnClassAndInjectFields(clazz, o);
             return o;
         } else {
-            throw new HQException("Cannot instantiate interface: " + clazz.getName());
+            throw new HQException("Cannot instantiate interface: " + classInfo.getName());
         }
     }
 
@@ -132,18 +132,16 @@ public class DIBeanContext extends AbstractContext {
         Field field = fieldInfo.loadClassAndGetField();
         //TODO: inject subclass/superclass AutoWire fields.
 
+        Class<?> fieldType = field.getType();
         String beanName = autoWire.qualifier();
         if (beanName.equals(Constants.DEFAULT_BEAN_NAME)) {
-            beanName = fieldInfo.getName();
+            beanName = fieldType.getName();
         }
         Object injectableFieldObject = dependencyManager.getAppContext().getBeanFactory().getBean(beanName);
         if(injectableFieldObject == null) {
-            Class<?> fieldType = field.getType();
-            if(!fieldType.isInterface()
-                    && !fieldType.isPrimitive()
-                    && !fieldType.isAnnotation()
-                    && !fieldType.isAnonymousClass()) {
-                injectableFieldObject = injectAutoWireWithNewObject(fieldType);
+            if(!fieldType.isInterface() && !fieldType.isAnonymousClass()) {
+                ClassInfo thisFieldClassInfo = dependencyManager.getScanResult().getClassInfo(fieldType.getName());
+                injectableFieldObject = autoWireWithNewObject(thisFieldClassInfo);
             }
         }
         field.setAccessible(true);
