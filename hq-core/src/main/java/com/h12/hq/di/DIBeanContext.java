@@ -37,7 +37,7 @@ public class DIBeanContext extends AbstractContext {
         }
     }
 
-    private void startControllerDI() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private void startControllerDI() throws IllegalAccessException {
         ClassInfoList controllerClassInfoList = dependencyManager.getAppContext().getScanResult().getClassesWithAnnotation(Controller.class);
         for (ClassInfo classInfo : controllerClassInfoList) {
             Object classObject = BeanUtils.getOrNewAndUpdateFactory(dependencyManager, classInfo.loadClass());

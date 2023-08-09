@@ -29,7 +29,8 @@ public class HQ {
         init();
         HQ.hqContext.start();
         Instant end = Instant.now();
-        LOGGER.info("Application start up time: {}", Duration.between(start, end));
+        Duration duration = Duration.between(start, end);
+        LOGGER.info("Application start up time in seconds: {} seconds", duration.getSeconds()/1000000000.0);
         Runtime.getRuntime().gc();
     }
 
