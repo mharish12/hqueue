@@ -1,8 +1,6 @@
 package com.h12.hq;
 
-public abstract class AbstractContext implements IContext {
-    @Override
-    public void stop() {}
+public abstract class AbstractContext extends AbstractPrepare implements IContext {
 
     @Override
     public IResource getResource() {

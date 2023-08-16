@@ -1,9 +1,6 @@
 package com.h12.hq;
 
-public abstract class AbstractManager implements IManager {
-
-    @Override
-    public void stop() {}
+public abstract class AbstractManager extends AbstractPrepare implements IManager {
 
     @Override
     public IContext getContext() {

@@ -46,5 +46,5 @@ dependencies {
     api group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.9'
     api group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.15.2'
 
-
+    api group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.11.2'
 }

@@ -1,6 +1,7 @@
 package com.h12.hq.server.http;
 
 import com.h12.hq.DependencyManager;
+import com.h12.hq.IPrepare;
 
 import java.lang.reflect.Method;
 

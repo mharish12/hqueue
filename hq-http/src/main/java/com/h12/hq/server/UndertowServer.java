@@ -3,6 +3,7 @@ package com.h12.hq.server;
 import com.h12.hq.AppContext;
 import com.h12.hq.DependencyManager;
 import com.h12.hq.server.http.AbstractServer;
+import com.h12.hq.server.http.handler.HttpMetricsHandler;
 import com.h12.hq.server.http.handler.RouteHttpHandler;
 import io.github.classgraph.MethodInfo;
 import io.undertow.Undertow;
@@ -30,9 +31,12 @@ public class UndertowServer extends AbstractServer {
 
     private HttpHandler registerHandler(DependencyManager dependencyManager) {
         PathHandler handler = new PathHandler(10);
+        handler.addExactPath("/metrics", new HttpMetricsHandler(dependencyManager));
         for (Map.Entry<String, MethodInfo> route : dependencyManager.getAppContext().getRoutes().entrySet()) {
             HttpHandler httpHandler = new RouteHttpHandler(route.getKey(), route.getValue(), dependencyManager);
-            handler.addPrefixPath(route.getKey(), httpHandler);
+            if(!route.getKey().equals("/metrics")) {
+                handler.addPrefixPath(route.getKey(), httpHandler);
+            }
 //            handler.addExactPath(route.getKey(), httpHandler);
         }
 //        handler.

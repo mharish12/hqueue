@@ -1,8 +1,10 @@
 package com.h12.hq;
 
 import com.h12.hq.di.BeanFactory;
+import com.h12.hq.metrics.util.HQMetricsUtil;
 import io.github.classgraph.MethodInfo;
 import io.github.classgraph.ScanResult;
+import io.prometheus.client.CollectorRegistry;
 
 import java.io.IOException;
 import java.util.Map;
@@ -65,5 +67,9 @@ public class AppContext extends AbstractContext {
 
     public void setScanResult(ScanResult scanResult) {
         this.appResource.setScanResult(scanResult);
+    }
+
+    public CollectorRegistry getCollectorRegistry() {
+        return HQMetricsUtil.getCollectorRegistry();
     }
 }
