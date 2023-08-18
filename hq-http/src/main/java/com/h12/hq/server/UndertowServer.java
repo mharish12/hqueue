@@ -7,6 +7,7 @@ import com.h12.hq.server.http.handler.HttpMetricsHandler;
 import com.h12.hq.server.http.handler.RouteHttpHandler;
 import io.github.classgraph.MethodInfo;
 import io.undertow.Undertow;
+import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
 import org.slf4j.Logger;
@@ -47,7 +48,9 @@ public class UndertowServer extends AbstractServer {
     public synchronized void start() {
         int port = super.getPort(appContext);
         String host = super.getHost(appContext);
-        Undertow.Builder builder = Undertow.builder();
+        Undertow.Builder builder = Undertow.builder()
+                .setServerOption(UndertowOptions.ENABLE_STATISTICS, true)
+                .setServerOption(UndertowOptions.ALWAYS_SET_DATE, true);
         builder.addHttpListener(port, host, registerHandler(dependencyManager));
         undertowServer = builder.build();
         undertowServer.start();
