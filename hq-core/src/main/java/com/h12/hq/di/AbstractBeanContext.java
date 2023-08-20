@@ -5,7 +5,7 @@ import com.h12.hq.DependencyManager;
 import com.h12.hq.di.annotation.*;
 import com.h12.hq.exception.HQException;
 import com.h12.hq.util.BeanUtils;
-import com.h12.hq.util.Constants;
+import com.h12.hq.util.Config;
 import com.h12.hq.util.ReflectionUtil;
 import io.github.classgraph.*;
 
@@ -42,7 +42,7 @@ abstract class AbstractBeanContext extends AbstractContext {
                     AnnotationInfo annotationInfo = methodInfo.getAnnotationInfo(Bean.class);
                     Bean beanAnnotation = (Bean) annotationInfo.loadClassAndInstantiate();
                     String name = beanAnnotation.qualifier();
-                    if (name.equals(Constants.DEFAULT_BEAN_NAME)) {
+                    if (name.equals(Config.DEFAULT_BEAN_NAME)) {
                         name = method.getReturnType().getName();
                     }//TODO: check if multiple bean exists
                     Object returnedBean = method.invoke(configurationClassBean);
@@ -83,7 +83,7 @@ abstract class AbstractBeanContext extends AbstractContext {
         Field field = fieldInfo.loadClassAndGetField();
         Class<?> fieldType = field.getType();
         String beanName = autoWire.qualifier();
-        if (beanName.equals(Constants.DEFAULT_BEAN_NAME)) {
+        if (beanName.equals(Config.DEFAULT_BEAN_NAME)) {
             beanName = fieldType.getName();
         }
         Object injectableFieldObject = dependencyManager.getAppContext().getBeanFactory().getBean(beanName);

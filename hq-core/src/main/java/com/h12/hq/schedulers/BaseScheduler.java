@@ -17,4 +17,8 @@ public abstract class BaseScheduler implements Scheduler {
     public void schedule() {
         scheduledThreadPoolExecutor.schedule(this::execute, 10, TimeUnit.SECONDS);
     }
+
+    public void schedule(long delay, TimeUnit timeUnit) {
+        scheduledThreadPoolExecutor.schedule(this::execute, delay, timeUnit);
+    }
 }

@@ -8,11 +8,11 @@ import io.prometheus.client.Gauge;
 
 public class HQMetricsUtil {
     private static final CollectorRegistry hqCollectorRegistry = new CollectorRegistry(true);
+    //    private static final CollectorRegistry hqCollectorRegistry = CollectorRegistry.defaultRegistry;
     public static final PrometheusMeterRegistry hqPrometheusRegistry;
 
     static {
-        hqPrometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT,
-                hqCollectorRegistry, Clock.SYSTEM);
+        hqPrometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT, hqCollectorRegistry, Clock.SYSTEM);
         hqPrometheusRegistry.config().commonTags("application", "hq-application");
         Metrics.addRegistry(hqPrometheusRegistry);
     }

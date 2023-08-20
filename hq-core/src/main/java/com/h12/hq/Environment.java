@@ -1,6 +1,6 @@
 package com.h12.hq;
 
-import com.h12.hq.util.Constants;
+import com.h12.hq.util.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +23,10 @@ public class Environment {
         try {
             ClassLoader classLoader = Environment.class.getClassLoader();
 
-            InputStream defaultPropertyFile = classLoader.getResourceAsStream(Constants.DEFAULT_PROPERTY_FILE_NAME);
+            InputStream defaultPropertyFile = classLoader.getResourceAsStream(Config.DEFAULT_PROPERTY_FILE_NAME);
             properties.load(defaultPropertyFile);
             properties.putAll(System.getenv());
-            String ENV_NAME = properties.getProperty(Constants.ENV_NAME);
+            String ENV_NAME = properties.getProperty(Config.ENV_NAME);
             if (ENV_NAME != null) {
                 properties.load(classLoader.getResourceAsStream(FILE_NAME + HYPHEN + ENV_NAME + EXTENSION));
             }

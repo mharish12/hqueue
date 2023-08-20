@@ -1,6 +1,6 @@
 package com.h12.hq.util;
 
-public class Constants {
+public class Config {
     public static final String DEFAULT_PROPERTY_FILE_NAME = "application.properties";
     public static final String ENV_NAME = "ENV";
     public static final String SERVER_PORT = "hq.server.port";

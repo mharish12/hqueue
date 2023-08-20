@@ -30,13 +30,14 @@ public class HttpMetricsHandler extends AbstractHandler implements io.undertow.s
     @Override
     public void handleRequest(HttpServerExchange exchange) throws Exception {
         Writer writer = new StringWriter();
-        TextFormat.write004(writer, dependencyManager.getAppContext().getCollectorRegistry().metricFamilySamples());
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         Iterable<Tag> tags = new ArrayList<>();
         HQMetricsUtil.gauge("mbean_count", tags, ManagementFactory.getPlatformMBeanServer().getMBeanCount());
         HQMetricsUtil.summary("mbean_heap_memory", tags).record(memoryMXBean.getHeapMemoryUsage().getCommitted());
         HQMetricsUtil.gauge("mbean_thread_count", tags, threadMXBean.getThreadCount());
+
+        TextFormat.write004(writer, dependencyManager.getAppContext().getCollectorRegistry().metricFamilySamples());
         exchange.setStatusCode(200).getResponseSender().send(writer.toString());
     }
 }
