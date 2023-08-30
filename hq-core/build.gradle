@@ -47,4 +47,8 @@ dependencies {
     api group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.15.2'
 
     api group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.11.2'
+    implementation group: 'io.dropwizard', name: 'dropwizard-metrics', version: '4.0.1'
+    implementation group: 'io.prometheus', name: 'simpleclient_dropwizard', version: '0.16.0'
+    implementation group: 'io.dropwizard.metrics', name: 'metrics-jvm', version: '4.2.19'
+
 }
