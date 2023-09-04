@@ -13,6 +13,7 @@ import io.undertow.security.handlers.AuthenticationCallHandler;
 import io.undertow.security.handlers.AuthenticationMechanismsHandler;
 import io.undertow.security.impl.BasicAuthenticationMechanism;
 import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.MetricsHandler;
 import io.undertow.server.handlers.PathHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,10 @@ public class UndertowServer extends AbstractServer {
 
     private HttpHandler registerHandlers(DependencyManager dependencyManager) {
 
-        handler.addExactPath("/metrics", new HttpMetricsHandler(dependencyManager));
+        HttpMetricsHandler httpMetricsHandler = new HttpMetricsHandler(dependencyManager);
+        MetricsHandler metricsHandler = new MetricsHandler(httpMetricsHandler);
+
+        handler.addExactPath("/metrics", metricsHandler);
         for (Map.Entry<String, MethodInfo> route : dependencyManager.getAppContext().getRoutes().entrySet()) {
             HttpHandler httpHandler = new RouteHttpHandler(route.getKey(), route.getValue(), dependencyManager);
             if(!route.getKey().equals("/metrics")) {

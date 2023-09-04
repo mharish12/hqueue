@@ -18,15 +18,15 @@ plugins {
 archivesBaseName = 'hqueue'
 
 class VersionPlugin implements Plugin<Project> {
-    private static projectVersion = null;
+    private static projectVersion = null
 
     @Override
     void apply(Project updatableProject) {
         if (projectVersion == null && updatableProject.name.equals("hqueue")) {
-            def properties = new Properties();
-            File propertiesFile = updatableProject.file("src/main/resources/project.properties");
+            def properties = new Properties()
+            File propertiesFile = updatableProject.file("src/main/resources/project.properties")
             propertiesFile.withInputStream {
-                properties.load(it);
+                properties.load(it)
             }
             projectVersion = properties.getProperty("application.version")
         }
@@ -36,22 +36,22 @@ class VersionPlugin implements Plugin<Project> {
     }
 }
 
-class AnnotationProcessorPlugin implements Plugin<Project> {
-    @Override
-    void apply(Project updatableProject) {
-        updatableProject.plugins.withType(JavaPlugin) {
-            // Add all your annotation processors here
-
-            // Add more annotation processors as needed
-        }
-    }
-
-    private void applyProcessor(Project project, String processorClassName) {
-        project.dependencies {
-            annotationProcessor processorClassName
-        }
-    }
-}
+//class AnnotationProcessorPlugin implements Plugin<Project> {
+//    @Override
+//    void apply(Project updatableProject) {
+//        updatableProject.plugins.withType(JavaPlugin) {
+//            // Add all your annotation processors here
+//
+//            // Add more annotation processors as needed
+//        }
+//    }
+//
+//    private void applyProcessor(Project project, String processorClassName) {
+//        project.dependencies {
+//            annotationProcessor processorClassName
+//        }
+//    }
+//}
 
 allprojects {
     group = 'com.h12.hq'
@@ -62,7 +62,6 @@ allprojects {
     apply plugin: VersionPlugin
 //    apply plugin: 'groovy'
 //    apply plugin: AnnotationProcessorPlugin
-//    apply plugin: AnnotationProcessorPlugin
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -72,7 +71,7 @@ allprojects {
     publishing {
         publications {
             pluginJar(MavenPublication) {
-                groupId "com.h12.hq"
+                groupId this.groupId
                 version this.version
             }
         }
@@ -82,8 +81,8 @@ allprojects {
                 name = "GitHubPackages"
                 url = "https://maven.pkg.github.com/mharish12/hqueue"
                 credentials {
-                    username = "harish9493566217@gmail.com"
-                    password = ""
+                    username = System.getenv("ARTIFACTORY_USER")
+                    password = System.getenv("ARTIFACTORY_PASSWORD")
                 }
             }
         }
@@ -95,10 +94,7 @@ allprojects {
 
     dependencies {
         implementation 'org.reflections:reflections:0.10.2'
-//        implementation 'com.googlecode.classgrep:classgrep:1.0'
         implementation 'io.github.classgraph:classgraph:4.8.157'
-//        implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.7'
-//        implementation 'io.undertow:undertow-core:2.3.4.Final'
         testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
         testImplementation platform('org.junit:junit-bom:5.9.1')
         testImplementation 'org.junit.jupiter:junit-jupiter'
