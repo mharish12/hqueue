@@ -11,8 +11,7 @@ repositories {
 }
 
 dependencies {
-    api project(":hq-http")
-//    implementation project(":hq-core")
+    api project(':hq-http-undertow')//    implementation project(":hq-core")
 //    api project(":hq-core")
 //    api 'org.hibernate:hibernate-validator:8.0.1.Final'
 //    api group: 'jakarta.el', name: 'jakarta.el-api', version: '5.0.1'
