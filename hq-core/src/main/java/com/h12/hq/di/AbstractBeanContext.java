@@ -7,6 +7,7 @@ import com.h12.hq.exception.HQException;
 import com.h12.hq.util.BeanUtils;
 import com.h12.hq.util.Config;
 import com.h12.hq.util.ReflectionUtil;
+import com.h12.hq.util.StringConstants;
 import io.github.classgraph.*;
 
 import java.lang.annotation.Annotation;
@@ -14,6 +15,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 abstract class AbstractBeanContext extends AbstractContext {
     protected DependencyManager dependencyManager;
@@ -35,7 +39,8 @@ abstract class AbstractBeanContext extends AbstractContext {
             MethodInfo defaultConstructorMethodInfo = constructorMethodInfo.get(0);
             Constructor<?> constructor = defaultConstructorMethodInfo.loadClassAndGetConstructor();
             configurationClassBean = ReflectionUtil.newInstance(constructor);
-            setFields(classInfo, configurationClassBean); //TODO: set super class fields first.
+//            superClassInjection(classInfo, configurationClassBean);
+            setFields(classInfo, configurationClassBean);
             for (MethodInfo methodInfo : classInfo.getDeclaredMethodInfo()) {
                 if (methodInfo.hasAnnotation(Bean.class)) {
                     Method method = methodInfo.loadClassAndGetMethod();
@@ -46,11 +51,13 @@ abstract class AbstractBeanContext extends AbstractContext {
                         name = method.getReturnType().getName();
                     }//TODO: check if multiple bean exists
                     Object returnedBean = method.invoke(configurationClassBean);
+                    setFields(dependencyManager.getAppContext().getScanResult().getClassInfo(name), returnedBean);
                     dependencyManager.getAppContext().getBeanFactory().put(name, returnedBean);
                 }
             }
         }
     }
+
     void superClassInjection(ClassInfo childClass, Object classObject) throws IllegalAccessException {
         if (childClass != null && !childClass.isInterface() && !childClass.isAnnotation()) {
             ClassInfo supperClass = childClass.getSuperclass();
@@ -106,9 +113,92 @@ abstract class AbstractBeanContext extends AbstractContext {
         if (propertyValue == null) {
             propertyValue = value.defaultValue();
         }
-        field.setAccessible(true);
-        field.set(classObject, propertyValue);
-        field.setAccessible(false);
+        Object actualPropertyValue = null;
+        if (propertyValue.contains(StringConstants.COMMA)) {
+            actualPropertyValue = parseArrayOrCollectionValueType(fieldInfo, propertyValue);
+        } else {
+            actualPropertyValue = parseSingleValueType(fieldInfo, propertyValue);
+        }
+        if (actualPropertyValue != null) {
+            field.setAccessible(true);
+            field.set(classObject, actualPropertyValue);
+            field.setAccessible(false);
+        }
+    }
+
+    private Object parseSingleValueType(FieldInfo fieldInfo, String propertyValue) {
+        Class<?> fieldType = fieldInfo.loadClassAndGetField().getType();
+        if (fieldType == String.class) {
+            return propertyValue;
+        } else if ((fieldType == Integer.TYPE && fieldType.isPrimitive()) || fieldType == Integer.class) {
+            return Integer.parseInt(propertyValue);
+        } else if ((fieldType == Long.TYPE && fieldType.isPrimitive()) || fieldType == Long.class) {
+            return Long.parseLong(propertyValue);
+        } else if ((fieldType == Double.TYPE && fieldType.isPrimitive()) || fieldType == Double.class) {
+            return Double.parseDouble(propertyValue);
+        } else {
+            return null;
+        }
+    }
+
+    private Object parseArrayOrCollectionValueType(FieldInfo fieldInfo, String propertyValue) {
+        Class<?> fieldType = fieldInfo.loadClassAndGetField().getType();
+        if (fieldType.isArray() && fieldType == String[].class) {
+            return propertyValue.split(StringConstants.COMMA);
+        } else if (fieldType.isArray() && fieldType == Integer[].class) {
+            String[] props = propertyValue.split(StringConstants.COMMA);
+            Integer[] integers = new Integer[props.length];
+            for (int i = 0; i < props.length; i++) {
+                integers[i] = Integer.parseInt(props[i]);
+            }
+            return integers;
+        } else if (fieldType.isArray() && fieldType == Long[].class) {
+            String[] props = propertyValue.split(StringConstants.COMMA);
+            Long[] longs = new Long[props.length];
+            for (int i = 0; i < props.length; i++) {
+                longs[i] = Long.parseLong(props[i]);
+            }
+            return longs;
+        } else if (fieldType.isArray() && fieldType == Double[].class) {
+            String[] props = propertyValue.split(StringConstants.COMMA);
+            Double[] doubles = new Double[props.length];
+            for (int i = 0; i < props.length; i++) {
+                doubles[i] = Double.parseDouble(props[i]);
+            }
+            return doubles;
+        }
+        return parseCollectionValueType(fieldInfo, propertyValue);
+    }
+
+    private Object parseCollectionValueType(FieldInfo fieldInfo, String propertyValue) {
+        Class<?> fieldType = fieldInfo.loadClassAndGetField().getType();
+        if (fieldType == List.class) {
+            List<String> list = new ArrayList<>();
+            Collections.addAll(list, propertyValue.split(StringConstants.COMMA));
+            return list;
+        } else if (fieldType == Integer[].class) {
+            String[] props = propertyValue.split(StringConstants.COMMA);
+            Integer[] integers = new Integer[props.length];
+            for (int i = 0; i < props.length; i++) {
+                integers[i] = Integer.parseInt(props[i]);
+            }
+            return integers;
+        } else if (fieldType == Long[].class) {
+            String[] props = propertyValue.split(StringConstants.COMMA);
+            Long[] longs = new Long[props.length];
+            for (int i = 0; i < props.length; i++) {
+                longs[i] = Long.parseLong(props[i]);
+            }
+            return longs;
+        } else if (fieldType == Double[].class) {
+            String[] props = propertyValue.split(StringConstants.COMMA);
+            Double[] doubles = new Double[props.length];
+            for (int i = 0; i < props.length; i++) {
+                doubles[i] = Double.parseDouble(props[i]);
+            }
+            return doubles;
+        }
+        return null;
     }
 
     Object autoWireWithNewObject(ClassInfo classInfo) throws IllegalAccessException {

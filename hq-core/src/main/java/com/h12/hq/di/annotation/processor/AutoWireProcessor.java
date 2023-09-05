@@ -16,6 +16,7 @@ public class AutoWireProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+//        throw new RuntimeException("Annotation process stopped");
         for (TypeElement annotation : annotations) {
             Set<? extends Element> annotatedElements = roundEnv.getElementsAnnotatedWith(annotation);
             for (Element element : annotatedElements) {

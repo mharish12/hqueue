@@ -1,4 +1,5 @@
 rootProject.name = 'hqueue'
 include 'hq-core', 'hq-http-undertow'
 include 'hq-examples'
+include 'hq-kafka'
 

@@ -1,5 +1,7 @@
 package com.h12.ecommerce.dao;
 
+import com.h12.ecommerce.model.Product;
+import com.h12.hq.di.annotation.AutoWire;
 import com.h12.hq.di.annotation.Component;
 import com.h12.hq.hooks.ShutDownHook;
 import org.slf4j.Logger;
@@ -12,13 +14,15 @@ import java.util.Map;
 public class ExampleDao extends ShutDownHook {
     private final Logger logger = LoggerFactory.getLogger(ExampleDao.class);
     private final Map<String, String> daoMap;
+    @AutoWire
+    private Product product;
 
     public ExampleDao() {
         this.daoMap = new HashMap<>();
     }
 
     public String getString(String key) {
-        return "TEST STRING";
+        return product.getName();
     }
 
     public void put(String key, String value) {
