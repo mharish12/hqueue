@@ -26,19 +26,19 @@ public class DependencyManager implements Serializable {
 
     void prepare() {
         this.appContext.start();
-        for(Map.Entry<String, IManager> managerEntry: managers.entrySet()) {
+        for (Map.Entry<String, IManager> managerEntry : managers.entrySet()) {
             managerEntry.getValue().prepare(this);
         }
     }
 
     void start() {
-        for(Map.Entry<String, IManager> managerEntry: managers.entrySet()) {
+        for (Map.Entry<String, IManager> managerEntry : managers.entrySet()) {
             managerEntry.getValue().start();
         }
     }
 
     void stop() {
-        for(Map.Entry<String, IManager> managerEntry: managers.entrySet()) {
+        for (Map.Entry<String, IManager> managerEntry : managers.entrySet()) {
             managerEntry.getValue().stop();
         }
     }

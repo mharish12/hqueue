@@ -12,7 +12,7 @@ public abstract class AbstractHandler extends HQValidator implements IResolver {
     }
 
     @Override
-    public void resolve(Method method, Object methodClassObject, DependencyManager dependencyManager, Object ...args) {
+    public void resolve(Method method, Object methodClassObject, DependencyManager dependencyManager, Object... args) {
         //TODO: implement to get all the details required to resolve this method.
 
         validate(methodClassObject, method, args);

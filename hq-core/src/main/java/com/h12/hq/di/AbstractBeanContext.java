@@ -11,13 +11,8 @@ import com.h12.hq.util.StringConstants;
 import io.github.classgraph.*;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.*;
+import java.util.*;
 
 abstract class AbstractBeanContext extends AbstractContext {
     protected DependencyManager dependencyManager;
@@ -114,7 +109,7 @@ abstract class AbstractBeanContext extends AbstractContext {
             propertyValue = value.defaultValue();
         }
         Object actualPropertyValue = null;
-        if (propertyValue.contains(StringConstants.COMMA)) {
+        if (propertyValue.contains(StringConstants.SPACE)) {
             actualPropertyValue = parseArrayOrCollectionValueType(fieldInfo, propertyValue);
         } else {
             actualPropertyValue = parseSingleValueType(fieldInfo, propertyValue);
@@ -144,23 +139,23 @@ abstract class AbstractBeanContext extends AbstractContext {
     private Object parseArrayOrCollectionValueType(FieldInfo fieldInfo, String propertyValue) {
         Class<?> fieldType = fieldInfo.loadClassAndGetField().getType();
         if (fieldType.isArray() && fieldType == String[].class) {
-            return propertyValue.split(StringConstants.COMMA);
+            return propertyValue.split(StringConstants.SPACE);
         } else if (fieldType.isArray() && fieldType == Integer[].class) {
-            String[] props = propertyValue.split(StringConstants.COMMA);
+            String[] props = propertyValue.split(StringConstants.SPACE);
             Integer[] integers = new Integer[props.length];
             for (int i = 0; i < props.length; i++) {
                 integers[i] = Integer.parseInt(props[i]);
             }
             return integers;
         } else if (fieldType.isArray() && fieldType == Long[].class) {
-            String[] props = propertyValue.split(StringConstants.COMMA);
+            String[] props = propertyValue.split(StringConstants.SPACE);
             Long[] longs = new Long[props.length];
             for (int i = 0; i < props.length; i++) {
                 longs[i] = Long.parseLong(props[i]);
             }
             return longs;
         } else if (fieldType.isArray() && fieldType == Double[].class) {
-            String[] props = propertyValue.split(StringConstants.COMMA);
+            String[] props = propertyValue.split(StringConstants.SPACE);
             Double[] doubles = new Double[props.length];
             for (int i = 0; i < props.length; i++) {
                 doubles[i] = Double.parseDouble(props[i]);
@@ -170,33 +165,50 @@ abstract class AbstractBeanContext extends AbstractContext {
         return parseCollectionValueType(fieldInfo, propertyValue);
     }
 
+    private Object parseCollectionGenericType(Class<?> genericTypeClass, String propertyValue, Collection<Object> collection) {
+        if (genericTypeClass == String.class) {
+            Collections.addAll(collection, propertyValue.split(StringConstants.SPACE));
+        } else if ((genericTypeClass == Long.TYPE && genericTypeClass.isPrimitive()) || genericTypeClass == Long.class) {
+            for (String s : propertyValue.split(StringConstants.SPACE)) {
+                collection.add(Long.parseLong(s));
+            }
+        } else if ((genericTypeClass == Integer.TYPE && genericTypeClass.isPrimitive()) || genericTypeClass == Integer.class) {
+            for (String s : propertyValue.split(StringConstants.SPACE)) {
+                collection.add(Integer.parseInt(s));
+            }
+        } else if ((genericTypeClass == Double.TYPE && genericTypeClass.isPrimitive()) || genericTypeClass == Double.class) {
+            for (String s : propertyValue.split(StringConstants.SPACE)) {
+                collection.add(Double.parseDouble(s));
+            }
+        } else {
+            return null;
+        }
+        return collection;
+    }
+
+    private Object parseCollectionType(Class<?> collectionType, Class<?> genericTypeClass, String propertyValue) {
+        if (collectionType == List.class) {
+            return parseCollectionGenericType(genericTypeClass, propertyValue, new ArrayList<>());
+        } else if (collectionType == Set.class) {
+            return parseCollectionGenericType(genericTypeClass, propertyValue, new HashSet<>());
+        }
+        return null;
+    }
+
     private Object parseCollectionValueType(FieldInfo fieldInfo, String propertyValue) {
         Class<?> fieldType = fieldInfo.loadClassAndGetField().getType();
+        Field field = fieldInfo.loadClassAndGetField();
+        ParameterizedType genericType = (ParameterizedType) field.getGenericType();
+        Class<?> genericTypeClass = (Class<?>) genericType.getActualTypeArguments()[0];
         if (fieldType == List.class) {
-            List<String> list = new ArrayList<>();
-            Collections.addAll(list, propertyValue.split(StringConstants.COMMA));
-            return list;
-        } else if (fieldType == Integer[].class) {
-            String[] props = propertyValue.split(StringConstants.COMMA);
+            return parseCollectionType(fieldType, genericTypeClass, propertyValue);
+        } else if (fieldType == Set.class) {
+            String[] props = propertyValue.split(StringConstants.SPACE);
             Integer[] integers = new Integer[props.length];
             for (int i = 0; i < props.length; i++) {
                 integers[i] = Integer.parseInt(props[i]);
             }
             return integers;
-        } else if (fieldType == Long[].class) {
-            String[] props = propertyValue.split(StringConstants.COMMA);
-            Long[] longs = new Long[props.length];
-            for (int i = 0; i < props.length; i++) {
-                longs[i] = Long.parseLong(props[i]);
-            }
-            return longs;
-        } else if (fieldType == Double[].class) {
-            String[] props = propertyValue.split(StringConstants.COMMA);
-            Double[] doubles = new Double[props.length];
-            for (int i = 0; i < props.length; i++) {
-                doubles[i] = Double.parseDouble(props[i]);
-            }
-            return doubles;
         }
         return null;
     }

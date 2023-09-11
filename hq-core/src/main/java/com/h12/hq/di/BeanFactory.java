@@ -22,7 +22,7 @@ public class BeanFactory extends AbstractResource {
     public Object getBean(String className) {
         return beans.get(className);
     }
-    
+
     public Object put(Object object) {
         return put(object.getClass().getName(), object);
     }

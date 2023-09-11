@@ -4,5 +4,6 @@ import com.h12.hq.IPrepare;
 
 public interface IServer extends IPrepare {
     String getHost();
+
     Integer getPort();
 }

@@ -4,6 +4,7 @@ public class HQValidationException extends RuntimeException {
     public HQValidationException() {
         super();
     }
+
     public HQValidationException(String msg) {
         super(msg);
     }

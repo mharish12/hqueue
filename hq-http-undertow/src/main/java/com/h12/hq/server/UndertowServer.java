@@ -56,7 +56,7 @@ public class UndertowServer extends AbstractServer {
         handler.addExactPath("/metrics", metricsHandler);
         for (Map.Entry<String, MethodInfo> route : dependencyManager.getAppContext().getRoutes().entrySet()) {
             HttpHandler httpHandler = new RouteHttpHandler(route.getKey(), route.getValue(), dependencyManager);
-            if(!route.getKey().equals("/metrics")) {
+            if (!route.getKey().equals("/metrics")) {
                 handler.addPrefixPath(route.getKey(), httpHandler);
             }
 //            handler.addExactPath(route.getKey(), httpHandler);

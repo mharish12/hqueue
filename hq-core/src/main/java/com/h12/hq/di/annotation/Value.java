@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface Value {
     String value();
+
     String defaultValue() default StringConstants.EMPTY_STRING;
 }

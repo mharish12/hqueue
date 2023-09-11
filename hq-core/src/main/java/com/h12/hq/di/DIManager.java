@@ -11,7 +11,9 @@ import io.github.classgraph.ScanResult;
 public abstract class DIManager extends AbstractManager {
 
     protected static ScanResult scanResult;
-    protected DIManager() {}
+
+    protected DIManager() {
+    }
 
     @Override
     public void prepare(DependencyManager dependencyManager) {

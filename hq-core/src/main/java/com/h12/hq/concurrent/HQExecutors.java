@@ -3,8 +3,8 @@ package com.h12.hq.concurrent;
 import java.util.concurrent.*;
 
 public class HQExecutors {
-//    private static Executor executor;
-    private static ExecutorService  executorService;
+    //    private static Executor executor;
+    private static ExecutorService executorService;
 
     static {
 //        executor = new ScheduledThreadPoolExecutor(10);

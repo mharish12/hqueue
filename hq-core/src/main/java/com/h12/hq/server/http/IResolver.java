@@ -6,5 +6,5 @@ import com.h12.hq.IPrepare;
 import java.lang.reflect.Method;
 
 public interface IResolver {
-    void resolve(Method method, Object methodClassObject, DependencyManager dependencyManager, Object ...args);
+    void resolve(Method method, Object methodClassObject, DependencyManager dependencyManager, Object... args);
 }

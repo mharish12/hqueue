@@ -23,16 +23,16 @@ public class RouteManager extends AbstractManager {
     @Override
     public void start() {
         ClassInfoList controllerClasses = this.dependencyManager.getScanResult().getClassesWithAnnotation(Controller.class);
-        for(ClassInfo controllerClass: controllerClasses) {
+        for (ClassInfo controllerClass : controllerClasses) {
             String basePath = StringConstants.EMPTY_STRING;
-            if(controllerClass.hasAnnotation(Path.class)) {
+            if (controllerClass.hasAnnotation(Path.class)) {
                 AnnotationInfo annotationInfo = controllerClass.getAnnotationInfo(Path.class);
                 Path path = (Path) annotationInfo.loadClassAndInstantiate();
                 basePath = formulate(path.value());
             }
-            for(MethodInfo methodInfo: controllerClass.getDeclaredMethodInfo()) {
+            for (MethodInfo methodInfo : controllerClass.getDeclaredMethodInfo()) {
                 String methodPath = "";
-                if(methodInfo.hasAnnotation(Path.class)) {
+                if (methodInfo.hasAnnotation(Path.class)) {
                     AnnotationInfo annotationInfo = methodInfo.getAnnotationInfo(Path.class);
                     Path methodAnnotationPath = (Path) annotationInfo.loadClassAndInstantiate();
                     methodPath = formulate(methodAnnotationPath.value());
@@ -45,8 +45,8 @@ public class RouteManager extends AbstractManager {
 
     public String formulate(String path) {
         StringBuilder pathBuilder = new StringBuilder();
-        for(String route: path.split(StringConstants.FRONT_SLASH)) {
-            if(!route.equals(StringConstants.EMPTY_STRING)) {
+        for (String route : path.split(StringConstants.FRONT_SLASH)) {
+            if (!route.equals(StringConstants.EMPTY_STRING)) {
                 pathBuilder.append(StringConstants.FRONT_SLASH);
                 pathBuilder.append(route);
             }

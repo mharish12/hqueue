@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface Controller {
     String path() default StringConstants.EMPTY_STRING;
+
     String qualifier() default Config.DEFAULT_BEAN_NAME;
 }

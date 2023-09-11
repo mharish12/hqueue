@@ -23,11 +23,11 @@ public class ShutDownHookManager extends AbstractManager {
         ClassInfoList classInfoList = dependencyManager.getScanResult().getClassesImplementing(IShutDownHook.class);
         for (ClassInfo classInfo : classInfoList) {
             String hookName = classInfo.getName();
-            if(!classInfo.isInterfaceOrAnnotation()
+            if (!classInfo.isInterfaceOrAnnotation()
                     && !classInfo.isAbstract()
                     && !classInfo.isAnonymousInnerClass()
                     && classInfo.isPublic()) {
-                if(!registeredHooks.contains(hookName)) {
+                if (!registeredHooks.contains(hookName)) {
                     IShutDownHook resource = (IShutDownHook) dependencyManager.getAppContext().getBeanFactory().getBean(hookName);
                     runtime.addShutdownHook(new Thread(resource));
                     registeredHooks.add(hookName);
