@@ -5,7 +5,7 @@ import com.h12.hq.IResource;
 import com.h12.hq.hooks.ShutDownHook;
 import com.h12.hq.util.Config;
 
-public abstract class AbstractServer extends ShutDownHook implements IServer, IResource {
+public abstract class AbstractServer extends ShutDownHook implements IServer {
     public int getPort(AppContext appContext) {
         return Integer.parseInt(appContext.getEnvironment().getProperty(Config.SERVER_PORT, Config.DEFAULT_SERVER_PORT));
     }

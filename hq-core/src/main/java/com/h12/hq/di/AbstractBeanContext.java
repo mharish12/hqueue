@@ -109,7 +109,7 @@ abstract class AbstractBeanContext extends AbstractContext {
             propertyValue = value.defaultValue();
         }
         Object actualPropertyValue = null;
-        if (propertyValue.contains(StringConstants.SPACE)) {
+        if (ReflectionUtil.isCollectionOrArray(fieldInfo)) {
             actualPropertyValue = parseArrayOrCollectionValueType(fieldInfo, propertyValue);
         } else {
             actualPropertyValue = parseSingleValueType(fieldInfo, propertyValue);
@@ -200,17 +200,7 @@ abstract class AbstractBeanContext extends AbstractContext {
         Field field = fieldInfo.loadClassAndGetField();
         ParameterizedType genericType = (ParameterizedType) field.getGenericType();
         Class<?> genericTypeClass = (Class<?>) genericType.getActualTypeArguments()[0];
-        if (fieldType == List.class) {
-            return parseCollectionType(fieldType, genericTypeClass, propertyValue);
-        } else if (fieldType == Set.class) {
-            String[] props = propertyValue.split(StringConstants.SPACE);
-            Integer[] integers = new Integer[props.length];
-            for (int i = 0; i < props.length; i++) {
-                integers[i] = Integer.parseInt(props[i]);
-            }
-            return integers;
-        }
-        return null;
+        return parseCollectionType(fieldType, genericTypeClass, propertyValue);
     }
 
     Object autoWireWithNewObject(ClassInfo classInfo) throws IllegalAccessException {

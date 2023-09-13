@@ -3,8 +3,8 @@ package com.h12.hq.server;
 import com.h12.hq.AbstractContext;
 import com.h12.hq.DependencyManager;
 import com.h12.hq.IResource;
-import com.h12.hq.exception.ServerException;
-import com.h12.hq.server.http.AbstractServer;
+import com.h12.hq.exception.HQServerException;
+import com.h12.hq.server.http.IServer;
 import com.h12.hq.util.Config;
 import com.h12.hq.util.ReflectionUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class ServerContext extends AbstractContext {
     private static final Logger logger = LoggerFactory.getLogger(ServerContext.class);
-    private AbstractServer iServer;
+    private IServer iServer;
 
     @Override
     public void prepare(DependencyManager dependencyManager) {
@@ -28,17 +28,17 @@ public class ServerContext extends AbstractContext {
             if (StringUtils.isNotEmpty(serverClassString)) {
                 Class<?> serverClass = ReflectionUtil.getTypedClass(serverClassString);
                 Constructor<?> constructor = serverClass.getDeclaredConstructor();
-                iServer = (AbstractServer) constructor.newInstance();
+                iServer = (IServer) constructor.newInstance();
                 iServer.prepare(dependencyManager);
             } else {
-                logger.info("Server not prepared.(Server class is empty)");
+                logger.info("Server not started.(Server class is empty)");
             }
-        } catch (ClassNotFoundException |
-                 InvocationTargetException |
-                 NoSuchMethodException |
-                 InstantiationException |
-                 IllegalAccessException e) {
-            throw new ServerException(e);
+        } catch (ClassNotFoundException
+                 | InvocationTargetException
+                 | NoSuchMethodException
+                 | InstantiationException
+                 | IllegalAccessException e) {
+            throw new HQServerException(e);
         }
     }
 

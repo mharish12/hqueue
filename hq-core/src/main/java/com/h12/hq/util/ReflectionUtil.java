@@ -1,7 +1,10 @@
 package com.h12.hq.util;
 
+import io.github.classgraph.FieldInfo;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 public class ReflectionUtil {
 
@@ -28,5 +31,15 @@ public class ReflectionUtil {
 
     public static Class<?> getTypedClass(String fqcn) throws ClassNotFoundException {
         return Class.forName(fqcn);
+    }
+
+    public static boolean isCollectionOrArray(FieldInfo fieldInfo) {
+        Class<?> fieldType = fieldInfo.loadClassAndGetField().getType();
+        if(fieldType.isArray()) {
+            return true;
+        } else if (Collection.class.isAssignableFrom(fieldType)) {
+            return true;
+        }
+        return false;
     }
 }

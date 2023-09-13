@@ -26,7 +26,7 @@ public class HQ {
     }
 
     public static void start() {
-        asyncStart();
+        syncStart();
     }
 
     private static void syncStart() {
